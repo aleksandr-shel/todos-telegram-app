@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="main container-fluid mt-3">
+    <!-- <div id="sideMenu">
+        test
+    </div> -->
+    <!-- <div class="info-box" id="infoBox">
+        
+    </div> -->
+
+    <div>
+        <form id="add-task-form" class="d-flex gap-3">
+            <div class="mb-1 w-100">
+                <input required type="text" name="title" class="form-control" placeholder="Добавить задачу">
+            </div>
+            <button type="submit" class="btn btn-primary float-end">
+                Добавить
+            </button>
+        </form>
+    </div>
+
+
+    <div id="todolist" class="list-group mt-1">
+        
+    </div>
+</div>
+{% endblock content %}

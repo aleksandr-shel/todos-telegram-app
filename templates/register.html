@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div  class='d-flex justify-content-center' style="height:70vh;">
+        <form id='registerForm' class='d-flex flex-column justify-content-center align-items-center'>  
+            <div class="mb-2">
+                <input type="text" name="username" placeholder='username'>
+            </div>
+            <div class="mb-2">
+                <input type="password" name="password" placeholder='пароль'>
+            </div>
+            {% comment %} <div class="mb-2">
+                <input type="password" name="password" placeholder='повторите пароль'>
+            </div> {% endcomment %}
+            <button class='btn btn-primary mb-2' type="submit">
+                Зарегистрироваться
+            </button>
+            <div class='response-message-div'>
+                <span id='response-message'>
+                </span>
+            </div>
+            <div class='d-flex justify-content-center'>
+                <a href="/login">
+                    Вход
+                </a>
+            </div>
+        </form>
+    </div>
+{% endblock content %}
