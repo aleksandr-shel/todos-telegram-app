@@ -53,12 +53,14 @@ class Todo(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     
-    creator = models.ForeignKey(User, related_name= 'created_tasks', on_delete=models.CASCADE)
+    creator = models.ForeignKey(
+        User, 
+        related_name= 'created_tasks', 
+        on_delete=models.CASCADE
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     due_date = models.DateTimeField(null=True, blank=True)
     completed_at = models.DateTimeField(null=True, blank=True)
-    
-    creator=models.ForeignKey(User, related_name='created_tasks', on_delete=models.CASCADE)
     
     group = models.ForeignKey(TaskGroup, related_name='tasks', on_delete=models.CASCADE, null=True, blank=True)
     
@@ -70,8 +72,7 @@ class Todo(models.Model):
         blank=True
     )
     
-    status = models.CharField(
-        max_length=20, 
+    status = models.IntegerField(
         choices=Status.choices,
         default=Status.TODO
     )

@@ -6,7 +6,9 @@ const csrftoken = document.querySelector('meta[name="csrf-token"]').getAttribute
 // task management
 const todoListDiv = document.getElementById('todolist')
 const addTaskForm = document.getElementById('add-task-form')
-
+const store={
+    user:{}
+}
 let tasks = []
 
 function renderTask(task, listDiv, end = true){
@@ -346,7 +348,8 @@ if(registerForm){
 const telegramConBtn= document.getElementById('telegramConnectBtn')
 
 function telegramConnect(){
-    window.location.href=`/telegram`
+    const userId=1
+    window.open(`https://t.me/tasks_shelukheev_bot?start=${userId}`, '_blank')
 }
 
 if (telegramConBtn){
@@ -377,6 +380,6 @@ document.addEventListener('DOMContentLoaded',()=>{
     if (todoListDiv){
         loadTodos()
     }
-    // getUser()
+    getUser()
     // console.log(responseMessageSpan)
 })
