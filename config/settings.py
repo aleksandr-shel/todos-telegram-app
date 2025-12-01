@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,9 +41,18 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'rest_framework_simplejwt',
+    'channels',
     'todos'
 ]
+
+ASGI_APPLICATION = "config.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default":{
+        # "BACKEND":"channels.layers.InMemoryChannelLayer"
+        "BACKEND":""
+    }
+}
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES":[
@@ -50,8 +60,6 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "todos.authentication.CSRFExemptSessionAuthentication",
-        # "rest_framework.authentication.SessionAuthentication",
-        # "rest_framework_simplejwt.authentication.JWTAuthentication",
     ]
 }
 

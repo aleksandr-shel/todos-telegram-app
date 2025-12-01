@@ -6,89 +6,57 @@ const csrftoken = document.querySelector('meta[name="csrf-token"]').getAttribute
 // task management
 const todoListDiv = document.getElementById('todolist')
 const addTaskForm = document.getElementById('add-task-form')
+const sideMenu =  document.getElementById('sideMenu')
+const selectedTaskForm =  document.getElementById('selectedTaskForm')
+const sideMenuCloseBtn =  document.getElementById('sideMenu-closebtn')
+const mainBox =  document.getElementById('main-box')
+const deleteTaskBtn = document.getElementById('deleteTaskBtn')
+
 const store={
-    user:{}
+    user:{},
+    selectedTask:null,
+    tasks:[],
+    setTasks: function(tasks){
+        this.tasks = tasks
+        renderList(this.tasks, todoListDiv)
+    },
+    deleteTask: function(id){
+        this.tasks = this.tasks.filter(task => task.id !== id)
+        renderList(this.tasks, todoListDiv)
+    },
+    addTask: function(task){
+        this.tasks.unshift(task)
+        renderTask(task, todoListDiv, false)
+    },
+    updateTask: function(id, updTask){
+        this.tasks = this.tasks.map(task => task.id === id ? updTask : task)
+        renderList(this.tasks, todoListDiv)
+    },
+    setSelectedTask: function(task){
+        this.selectedTask=task
+    }
 }
-let tasks = []
 
 function renderTask(task, listDiv, end = true){
     const itemDiv = document.createElement('div')
     const viewDiv = document.createElement('div')
-    const editForm = document.createElement('form')
     itemDiv.classList.add('list-group-item')
     viewDiv.classList.add('d-flex', 'justify-content-between', 'gap-1')
-    editForm.classList.add('d-flex', 'justify-content-between', 'hidden')
     
-
-    //название
+    //Название задачи
     const spanTitle = document.createElement('span')
     spanTitle.classList.add('task-title')
     spanTitle.textContent = `${task.title}`
 
-    //boolean завершения задачи, checkbox
-    const completeCheckbox = document.createElement('input')
-    completeCheckbox.type='checkbox'
-    completeCheckbox.checked=task.completed
-    completeCheckbox.addEventListener('change', (e)=>{
-        const todo_completed={
-            completed: e.target.checked
-        }
-        // toggleTaskCompletion(task.id, todo_completed)
-    })
-
-    //редактирование
-    const spanUpdate = document.createElement('span')
-    spanUpdate.addEventListener('click', (e)=>{
-        viewDiv.classList.add('hidden')
-        editForm.classList.remove('hidden')
-    })
-    spanUpdate.classList.add('text-decoration-underline', 'text-primary', 'cursor-pointer')
-    spanUpdate.textContent = 'редактировать'
-    //мод редактирования
-    const input = document.createElement('input')
-    input.name ='title'
-    input.classList.add('form-control')
-    input.value = task.title
-    const editBtn = document.createElement('button')
-    editBtn.classList.add('btn', 'btn-secondary', 'ms-1')
-    editBtn.type='submit'
-    editBtn.textContent='Редактировать'
-    const cancelBtn = document.createElement('button')
-    cancelBtn.type='button'
-    cancelBtn.classList.add('btn', 'btn-light', 'ms-1')
-    cancelBtn.textContent='Отмена'
-    cancelBtn.addEventListener('click', (e)=>{
-        viewDiv.classList.remove('hidden')
-        editForm.classList.add('hidden')
-    })
-
-    editForm.addEventListener('submit',(e)=>{
-        e.preventDefault()
-        const formData = new FormData(e.target)
-        const data = Object.fromEntries(formData.entries())
-        updateTodo(task.id, data)
-    })
-    editForm.append(input)
-    editForm.append(editBtn)
-    editForm.append(cancelBtn)
-
-    //удаление 
-    const spanDelete = document.createElement('span')
-    spanDelete.addEventListener('click', (e)=>{
-        deleteTodo(task.id)
-    })
-    spanDelete.classList.add('text-decoration-underline', 'text-secondary', 'cursor-pointer')
-    spanDelete.textContent = 'удалить'
-    
-
-    //собираем все компоненты
-    const actions = document.createElement('div')
-    actions.classList.add('d-flex', 'gap-2')
-    actions.append(spanUpdate, spanDelete)
-    viewDiv.append(completeCheckbox, spanTitle, actions)
+    viewDiv.append(spanTitle)
 
     itemDiv.append(viewDiv)
-    itemDiv.append(editForm)
+    itemDiv.addEventListener('click',(e)=>{
+        store.setSelectedTask(task)
+        sideMenu.classList.remove('hidden')
+        mainBox.classList.add('task-selected')
+        fillSelectedTaskForm()
+    })
 
     //добавлять в конце или начале листа
     if (end){
@@ -98,12 +66,47 @@ function renderTask(task, listDiv, end = true){
     }
 }
 
-
 function renderList(list, listDiv){
     listDiv.innerHTML = ""
     for (const item of list){
         renderTask(item, listDiv)
     }
+}
+
+function fillSelectedTaskForm(){
+    // function fillForm(form, obj) {
+    //     Object.keys(obj).forEach(key => {
+    //         const field = form.elements.namedItem(key);
+    //         if (field) {
+    //             field.value = obj[key];
+    //         }
+    //     });
+    // }
+//     The object keys must match the input names.
+
+// For checkboxes and radios, you must handle them separately:
+
+// if (field.type === "checkbox") {
+//     field.checked = !!obj[key];
+// }
+    if (store.selectedTask){
+        console.log(store.selectedTask)
+        Object.keys(store.selectedTask).forEach(key=>{
+            const field = selectedTaskForm.elements.namedItem(key)
+            if (field){
+                if (field.type === 'checkbox'){
+                    field.checked = false
+                }
+                field.value = store.selectedTask[key]
+            }
+        })
+    }
+}
+
+function closeSideMenu(){
+    sideMenu.classList.add('hidden')
+    mainBox.classList.remove('task-selected')
+    store.setSelectedTask(null)
 }
 
 async function loadTodos(){
@@ -116,13 +119,25 @@ async function loadTodos(){
 
         const data = await response.json()
         
-        tasks = Array.isArray(data) ? data : []
-    
-        renderList(tasks, todoListDiv)
-
+        const tasks = Array.isArray(data) ? data : []
+        store.setTasks(tasks)
     }catch(err){
         console.error(err)
     }    
+}
+async function loadTodo(id){
+    try{
+        const response = await fetch(baseUrl+'todos/' + id)
+        
+        if (!response.ok){
+            throw new Error(`${response.status} ${response.statusText}`)
+        }
+
+        const task = await response.json()
+        console.log(task)
+    }catch(err){
+        console.error(err)
+    }  
 }
 
 async function toggleTaskCompletion(id, todo_completed) {
@@ -160,8 +175,7 @@ async function postTodo(todo){
         }
         
         const data = await response.json()
-        renderTask(data, todoListDiv, false)
-        tasks.unshift(data)
+        store.addTask(data)
     }catch(err){
         console.error("Ошибка при создании задачи:", err)
     }
@@ -175,8 +189,7 @@ async function deleteTodo(id){
         if (!response.ok){
             throw new Error(`${response.status} ${response.statusText}`)
         }
-        tasks = tasks.filter(task => task.id !== id)
-        renderList(tasks, todoListDiv)
+        store.deleteTask(id)
     }catch(err){
         console.error("Ошибка:", err.message)
     }
@@ -186,7 +199,7 @@ async function deleteTodo(id){
 async function updateTodo(id, todo){
     try{
         const response = await fetch(baseUrl+'todos/' + id,{
-            method:'PUT',
+            method:'PATCH',
             headers: {
                 'Content-type':'application/json'
             },
@@ -196,8 +209,7 @@ async function updateTodo(id, todo){
             throw new Error(`${response.status} ${response.statusText}`)
         }
         const updatedTask = await response.json()
-        tasks = tasks.map(task => task.id === id ? updatedTask : task)
-        renderList(tasks, todoListDiv)
+        store.updateTask(id, updatedTask)
     }catch(err){
         console.error("Ошибка:", err.message)
     }
@@ -214,7 +226,34 @@ if (addTaskForm){
     })
 }
 
-// login/register
+if (selectedTaskForm){
+    selectedTaskForm.addEventListener('submit', (e)=>{
+        e.preventDefault()
+        const formData = new FormData(e.target)
+        const data = Object.fromEntries(formData.entries())
+        console.log(data)
+        
+    })
+}
+
+if (sideMenuCloseBtn){
+    sideMenuCloseBtn.addEventListener('click',(e)=>{
+        closeSideMenu()
+    })
+}
+
+const obj1=null
+
+if (deleteTaskBtn){
+    deleteTaskBtn.addEventListener('click',(e)=>{
+        if (store.selectedTask){
+            deleteTodo(store.selectedTask.id)
+            closeSideMenu()
+        }
+    })
+}
+
+// login-register
 const loginForm = document.getElementById('loginForm')
 const registerForm = document.getElementById('registerForm')
 const logoutBtn= document.getElementById('logoutBtn')
@@ -281,7 +320,8 @@ async function getUser() {
         if (!response.ok){
             throw new Error(`${response.status} ${response.statusText}`)
         }
-        console.log(await response.json())
+        const data = await response.json()
+        return data;
     }catch(err){
         console.log(err)
     }
@@ -348,8 +388,9 @@ if(registerForm){
 const telegramConBtn= document.getElementById('telegramConnectBtn')
 
 function telegramConnect(){
-    const userId=1
-    window.open(`https://t.me/tasks_shelukheev_bot?start=${userId}`, '_blank')
+    const userId= store.user.id
+    console.log('userid',  userId)
+    // window.open(`https://t.me/tasks_shelukheev_bot?start=${userId}`, '_blank')
 }
 
 if (telegramConBtn){
@@ -376,10 +417,9 @@ if (telegramConBtn){
 // }
 
 
-document.addEventListener('DOMContentLoaded',()=>{
+document.addEventListener('DOMContentLoaded', async()=>{
     if (todoListDiv){
         loadTodos()
     }
-    getUser()
-    // console.log(responseMessageSpan)
+    store.user = await getUser()
 })

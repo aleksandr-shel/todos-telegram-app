@@ -42,12 +42,13 @@ class TaskGroupSerializer(serializers.ModelSerializer):
     
 class TodoSerializer(serializers.ModelSerializer):
     creator = UserPublicSerializer(read_only=True)
+    status_display = serializers.CharField(source='get_status_display', read_only=True)
     class Meta:
         model = Todo
         fields = [
             'id', 'title', 'description', 'creator',
             'created_at', 'due_date', 'completed_at',
-            'group', 'assignee', 'status'
+            'group', 'assignee', 'status', 'status_display'
         ]
         read_only_fields = ['id', 'creator', 'created_at']
     

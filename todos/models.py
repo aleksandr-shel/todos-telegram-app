@@ -46,9 +46,9 @@ class GroupMembership(models.Model):
 class Todo(models.Model):
     
     class Status(models.IntegerChoices):
-        TODO = 1, 'To Do'
-        IN_PROGRESS = 2, 'In Progress'
-        DONE = 3, 'Done'
+        TODO = 1, 'К выполнению'
+        IN_PROGRESS = 2, 'В процессе'
+        DONE = 3, 'Выполнено'
     
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)

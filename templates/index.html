@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="main container-fluid mt-3">
-    <!-- <div id="sideMenu">
-        test
-    </div> -->
-    <!-- <div class="info-box" id="infoBox">
-        
-    </div> -->
-
-    <div>
+<main id="main-box" class='layout'>
+    <aside class="pane pane-left">
+        <ul class="nav-list">
+          <li class="active">Задачи</li>
+          <li>В процессе</li>
+          <li>Завершены</li>
+        </ul>
+    </aside>
+    <section class="pane pane-center">
         <form id="add-task-form" class="d-flex gap-3">
             <div class="mb-1 w-100">
                 <input required type="text" name="title" class="form-control" placeholder="Добавить задачу">
@@ -18,11 +18,48 @@
                 Добавить
             </button>
         </form>
-    </div>
 
+        <div id="todolist" class="list-group mt-1">
+            
+        </div>
+    </section>
+    <aside id="sideMenu" class="pane pane-right hidden">
+        <button id="sideMenu-closebtn" class="close-btn"></button>
+        <form id="selectedTaskForm" class="d-flex flex-column gap-1">
+            <div>
+                <label for="taskTitle">
+                    Название
+                </label>
+                <input class="form-control" id="taskTitle" name="title" placeholder="Название задачи">
+            </div>
+            <div>
+                <label for="taskDueDate">
+                    Срок выполнения
+                </label>
+                <input class="form-control" type="date" id="taskDueDate" name="due_date">
+            </div>
+            <div>
+                <input class="form-check-input" type="checkbox" id="taskStatus" name="status">
+                <label class="form-check-label" for="taskStatus">
+                    Выволнено
+                </label>
+            </div>
+            <div>
+                <textarea id="taskDescription" name="description" placeholder="Добавить примечание" class="form-control"></textarea>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-secondary">
+                    Сохранить
+                </button>
+            </div>
+        </form>
 
-    <div id="todolist" class="list-group mt-1">
-        
-    </div>
-</div>
+        <div class="mt-1">
+            <button class="btn btn-danger" id="deleteTaskBtn">
+                Удалить
+            </button>
+        </div>
+    </aside>
+</main>
+
 {% endblock content %}
