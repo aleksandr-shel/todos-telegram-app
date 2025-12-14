@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.exceptions import PermissionDenied
-from .models import Todo, TaskGroup, GroupMembership, User
-from .serializers import TodoSerializer, TaskGroupSerializer, RegisterSerializer, LoginSerializer, GroupMembershipSerializer, TaskGroupDetailsSerializer
+from ..models import Todo, TaskGroup, GroupMembership, User
+from ..serializers import TodoSerializer, TaskGroupSerializer, RegisterSerializer, LoginSerializer, GroupMembershipSerializer, TaskGroupDetailsSerializer
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import login, logout
 from django.db.models import Q

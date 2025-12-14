@@ -2,19 +2,27 @@
 
 {% block content %}
 <main id="main-box" class='layout'>
-    <aside class="pane pane-left">
-        <ul class="nav-list">
+    <!-- <aside class="pane pane-left">
+        <ul id="task-nav" class="nav-list">
           <li class="active">Задачи</li>
-          <li>В процессе</li>
           <li>Завершены</li>
         </ul>
-    </aside>
+    </aside> -->
     <section class="pane pane-center">
-        <form id="add-task-form" class="d-flex gap-3">
-            <div class="mb-1 w-100">
-                <input required type="text" name="title" class="form-control" placeholder="Добавить задачу">
+        <form id="add-task-form" class="d-flex flex-column gap-2">
+            <div>
+                <input required type="text" name="title" class="form-control" maxlength="255" placeholder="Добавить задачу">
             </div>
-            <button type="submit" class="btn btn-primary float-end">
+            <div>
+                <textarea class="form-control" name="description" id="addTaskDescription" placeholder="Добавить примечание"></textarea>
+            </div>
+            <div>
+                <label class="form-label" for="addDueDate">
+                    Срок выполнения:
+                </label>
+                <input class="form-control" style="width:350px;" id="addDueDate" type="date" name="due_date">
+            </div>
+            <button type="submit" class="btn btn-primary">
                 Добавить
             </button>
         </form>
@@ -27,35 +35,41 @@
         <button id="sideMenu-closebtn" class="close-btn"></button>
         <form id="selectedTaskForm" class="d-flex flex-column gap-1">
             <div>
-                <label for="taskTitle">
+                <label for="selectTaskTitle">
                     Название
                 </label>
-                <input class="form-control" id="taskTitle" name="title" placeholder="Название задачи">
+                <input class="form-control" id="selectTaskTitle" name="title" placeholder="Название задачи">
             </div>
             <div>
-                <label for="taskDueDate">
+                <label for="selectTaskDueDate">
                     Срок выполнения
                 </label>
-                <input class="form-control" type="date" id="taskDueDate" name="due_date">
+                <input class="form-control" type="date" id="selectTaskDueDate" name="due_date">
             </div>
             <div>
-                <input class="form-check-input" type="checkbox" id="taskStatus" name="status">
-                <label class="form-check-label" for="taskStatus">
+                <input type="hidden" id="taskStatusHidden" name="status" value="1">
+                <input 
+                    class="form-check-input" 
+                    type="checkbox" 
+                    id="taskStatusCheckbox" 
+                    name="status"
+                    value="3">
+                <label class="form-check-label" for="taskStatusCheckbox">
                     Выволнено
                 </label>
             </div>
             <div>
-                <textarea id="taskDescription" name="description" placeholder="Добавить примечание" class="form-control"></textarea>
+                <textarea id="selectTaskDescription" name="description" placeholder="Добавить примечание" class="form-control"></textarea>
             </div>
             <div>
-                <button type="submit" class="btn btn-secondary">
+                <button class="btn btn-dark w-100" type="submit">
                     Сохранить
                 </button>
             </div>
         </form>
 
-        <div class="mt-1">
-            <button class="btn btn-danger" id="deleteTaskBtn">
+        <div>
+            <button class="btn btn-secondary w-100" id="deleteTaskBtn">
                 Удалить
             </button>
         </div>

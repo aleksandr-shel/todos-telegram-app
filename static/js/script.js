@@ -3,19 +3,21 @@ const baseUrl = '/api/'
 const csrftoken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
 
+
+
+
 // task management
 const todoListDiv = document.getElementById('todolist')
-const addTaskForm = document.getElementById('add-task-form')
 const sideMenu =  document.getElementById('sideMenu')
-const selectedTaskForm =  document.getElementById('selectedTaskForm')
-const sideMenuCloseBtn =  document.getElementById('sideMenu-closebtn')
 const mainBox =  document.getElementById('main-box')
-const deleteTaskBtn = document.getElementById('deleteTaskBtn')
+
 
 const store={
     user:{},
     selectedTask:null,
     tasks:[],
+    groups:[],
+    selectedGroup:null,
     setTasks: function(tasks){
         this.tasks = tasks
         renderList(this.tasks, todoListDiv)
@@ -41,14 +43,29 @@ function renderTask(task, listDiv, end = true){
     const itemDiv = document.createElement('div')
     const viewDiv = document.createElement('div')
     itemDiv.classList.add('list-group-item')
-    viewDiv.classList.add('d-flex', 'justify-content-between', 'gap-1')
+    viewDiv.classList.add('d-flex','flex-column', 'justify-content-between', 'gap-1')
     
-    //Название задачи
+    //Описание задачи
     const spanTitle = document.createElement('span')
     spanTitle.classList.add('task-title')
     spanTitle.textContent = `${task.title}`
 
+
+    const spanStatus = document.createElement('span')
+    spanStatus.style.fontSize='0.6rem'
+    spanStatus.textContent=`${task.status_display}`
+
+    const spanDueDate = document.createElement('span')
+    spanDueDate.style.fontSize='0.6rem'
+    if (task.due_date){
+        spanDueDate.textContent=`${new Date(task.due_date).toLocaleDateString()}`
+    }
+
+    
+
     viewDiv.append(spanTitle)
+    viewDiv.append(spanStatus)
+    viewDiv.append(spanDueDate)
 
     itemDiv.append(viewDiv)
     itemDiv.addEventListener('click',(e)=>{
@@ -73,48 +90,60 @@ function renderList(list, listDiv){
     }
 }
 
+function autoResize(){
+    this.style.height = 'auto';
+    this.style.height = this.scrollHeight + 'px'
+}
+
+function setupTextareaAutoResize(id){
+    const ta = document.getElementById(id)
+    if (ta){
+        ta.style.maxHeight='500px'
+        ta.addEventListener('input',(e)=>{
+            autoResize.call(e.target)
+        })
+    }
+}
+
+setupTextareaAutoResize('selectTaskDescription')
+setupTextareaAutoResize('addTaskDescription')
+
 function fillSelectedTaskForm(){
-    // function fillForm(form, obj) {
-    //     Object.keys(obj).forEach(key => {
-    //         const field = form.elements.namedItem(key);
-    //         if (field) {
-    //             field.value = obj[key];
-    //         }
-    //     });
-    // }
-//     The object keys must match the input names.
-
-// For checkboxes and radios, you must handle them separately:
-
-// if (field.type === "checkbox") {
-//     field.checked = !!obj[key];
-// }
     if (store.selectedTask){
-        console.log(store.selectedTask)
         Object.keys(store.selectedTask).forEach(key=>{
-            const field = selectedTaskForm.elements.namedItem(key)
-            if (field){
-                if (field.type === 'checkbox'){
-                    field.checked = false
-                }
+            const fields = selectedTaskForm.elements.namedItem(key)
+
+            if (!fields) return;
+
+            if (fields instanceof RadioNodeList){
+                const checkbox = [...fields].find(f => f.type==='checkbox');
+                checkbox.checked = store.selectedTask[key] == 3;
+                return
+            }
+
+            const field = fields;
+
+            if (field.type === 'checkbox'){
+                field.checked = store.selectedTask[key] == 3 
+            } else if (field.type==='date' && store.selectedTask[key]){
+                field.value = store.selectedTask[key].slice(0,10)
+            } else if (field.type ==='textarea'){
+                field.value = store.selectedTask[key]
+                autoResize.call(field)
+            }else {
                 field.value = store.selectedTask[key]
             }
         })
     }
 }
 
-function closeSideMenu(){
-    sideMenu.classList.add('hidden')
-    mainBox.classList.remove('task-selected')
-    store.setSelectedTask(null)
-}
 
 async function loadTodos(){
     try{
         const response = await fetch(baseUrl+'todos/')
         
         if (!response.ok){
-            throw new Error(`${response.status} ${response.statusText}`)
+            await handleBadResponse(response)
         }
 
         const data = await response.json()
@@ -130,7 +159,7 @@ async function loadTodo(id){
         const response = await fetch(baseUrl+'todos/' + id)
         
         if (!response.ok){
-            throw new Error(`${response.status} ${response.statusText}`)
+            await handleBadResponse(response)
         }
 
         const task = await response.json()
@@ -139,27 +168,6 @@ async function loadTodo(id){
         console.error(err)
     }  
 }
-
-async function toggleTaskCompletion(id, todo_completed) {
-    try{
-        const response = await fetch(baseUrl+'todos/' + id,{
-            method:'PATCH',
-            headers: {
-                'Content-type':'application/json'
-            },
-            body: JSON.stringify(todo_completed)
-        })
-        if (!response.ok){
-            throw new Error(`${response.status} ${response.statusText}`)
-        }
-        const updatedTask = await response.json()
-        tasks = tasks.map(task => task.id === id ? updatedTask : task)
-        renderList(tasks, todoListDiv)
-    }catch(err){
-        console.error("Ошибка:", err.message)
-    }
-}
-
 
 async function postTodo(todo){
     try{
@@ -171,7 +179,7 @@ async function postTodo(todo){
             body: JSON.stringify(todo)
         })
         if (!response.ok){
-            throw new Error(`${response.status} ${response.statusText}`)
+            await handleBadResponse(response)
         }
         
         const data = await response.json()
@@ -187,7 +195,7 @@ async function deleteTodo(id){
             method:'DELETE'
         })
         if (!response.ok){
-            throw new Error(`${response.status} ${response.statusText}`)
+            await handleBadResponse(response)
         }
         store.deleteTask(id)
     }catch(err){
@@ -206,7 +214,7 @@ async function updateTodo(id, todo){
             body: JSON.stringify(todo)
         })
         if (!response.ok){
-            throw new Error(`${response.status} ${response.statusText}`)
+            await handleBadResponse(response)
         }
         const updatedTask = await response.json()
         store.updateTask(id, updatedTask)
@@ -216,47 +224,73 @@ async function updateTodo(id, todo){
 }
 
 
-if (addTaskForm){
+function closeSideMenu(){
+    sideMenu.classList.add('hidden')
+    mainBox.classList.remove('task-selected')
+    store.setSelectedTask(null)
+}
+
+function setupAddTaskForm(id){
+    const addTaskForm = document.getElementById('add-task-form')
+    if (addTaskForm){
     addTaskForm.addEventListener('submit', (e)=>{
         e.preventDefault()
         const formData = new FormData(e.target)
         const data = Object.fromEntries(formData.entries())
+        if (data.due_date===''){
+            data.due_date=null
+        }
         postTodo(data)
         e.target.reset()
     })
 }
-
-if (selectedTaskForm){
-    selectedTaskForm.addEventListener('submit', (e)=>{
-        e.preventDefault()
-        const formData = new FormData(e.target)
-        const data = Object.fromEntries(formData.entries())
-        console.log(data)
-        
-    })
 }
 
-if (sideMenuCloseBtn){
-    sideMenuCloseBtn.addEventListener('click',(e)=>{
-        closeSideMenu()
-    })
+function setupSideMenuForm(id){
+    const selectedTaskForm =  document.getElementById(id)
+    if (selectedTaskForm){
+        selectedTaskForm.addEventListener('submit', (e)=>{
+            e.preventDefault()
+            if (store.selectedTask){
+                const formData = new FormData(e.target)
+                const data = Object.fromEntries(formData.entries())
+                if (data.due_date===''){
+                    data.due_date=null
+                }
+                updateTodo(store.selectedTask.id, data)
+                closeSideMenu()
+            }
+        })
+    }
 }
 
-const obj1=null
-
-if (deleteTaskBtn){
-    deleteTaskBtn.addEventListener('click',(e)=>{
-        if (store.selectedTask){
-            deleteTodo(store.selectedTask.id)
+function setupSideMenuCloseBtn(id){
+    const sideMenuCloseBtn =  document.getElementById(id)
+    if (sideMenuCloseBtn){
+        sideMenuCloseBtn.addEventListener('click',(e)=>{
             closeSideMenu()
-        }
-    })
+        })
+    }
 }
+
+function setupDeleteTaskBtn(id){
+    const deleteTaskBtn = document.getElementById(id)
+    if (deleteTaskBtn){
+        deleteTaskBtn.addEventListener('click',(e)=>{
+            if (store.selectedTask){
+                deleteTodo(store.selectedTask.id)
+                closeSideMenu()
+            }
+        })
+    }
+}
+setupAddTaskForm('add-task-form')
+setupSideMenuForm('selectedTaskForm')
+setupSideMenuCloseBtn('sideMenu-closebtn')
+setupDeleteTaskBtn('deleteTaskBtn')
 
 // login-register
-const loginForm = document.getElementById('loginForm')
-const registerForm = document.getElementById('registerForm')
-const logoutBtn= document.getElementById('logoutBtn')
+
 const responseMessageSpan = document.getElementById('response-message')
 
 async function login(data){
@@ -269,14 +303,7 @@ async function login(data){
             body: JSON.stringify(data),
         })
         if (!response.ok){
-            const errorData = await response.json().catch(()=>null)
-            let errorMessage = '';
-            for (const [field, msgs] of Object.entries(errorData)){
-                if (Array.isArray(msgs) && msgs.length){
-                    errorMessage+=`${field}, ${msgs.join(' ')}`
-                }
-            }
-            throw new Error(`${response.status} ${response.statusText}\n${errorMessage}`)
+            await handleBadResponse(response)
         }
         window.location.href='/'
     }catch(err){
@@ -295,14 +322,7 @@ async function register(data){
         })
 
         if (!response.ok){
-            const errorData = await response.json().catch(()=>null)
-            let errorMessage = '';
-            for (const [field, msgs] of Object.entries(errorData)){
-                if (Array.isArray(msgs) && msgs.length){
-                    errorMessage+=`${field}, ${msgs.join(' ')} `
-                }
-            }
-            throw new Error(`${response.status} ${response.statusText}\n${errorMessage}`)
+            await handleBadResponse(response)
         }
         window.location.href='/login'
     }catch(err){
@@ -318,7 +338,7 @@ async function getUser() {
         })
 
         if (!response.ok){
-            throw new Error(`${response.status} ${response.statusText}`)
+            await handleBadResponse(response)
         }
         const data = await response.json()
         return data;
@@ -339,7 +359,7 @@ async function logout(){
         })
 
         if (!response.ok){
-            throw new Error(`${response.status} ${response.statusText}`)
+            await handleBadResponse(response)
         }
         window.location.href='/'
     }catch(err){
@@ -358,31 +378,55 @@ async function fetchShortcut(url, data, method='POST'){
     })
 }
 
-if (logoutBtn){
-    logoutBtn.addEventListener('click', (e)=>{
-        logout()
-    })
+async function handleBadResponse(response){
+    const errorData = await response.json().catch(()=>null)
+    let errorMessage = '';
+    for (const [field, msgs] of Object.entries(errorData)){
+        if (Array.isArray(msgs) && msgs.length){
+            errorMessage+=`${field}, ${msgs.join(' ')}`
+        }
+    }
+    throw new Error(`${response.status} ${response.statusText}\n${errorMessage}`)
 }
 
-if(loginForm){
-    loginForm.addEventListener('submit', (e)=>{
-        e.preventDefault()
-        const formData = new FormData(e.target)
-        const data = Object.fromEntries(formData.entries())
-        login(data)
-        e.target.reset()
-    })
+function setupLogoutBtn(id){
+    const logoutBtn= document.getElementById(id)
+    if (logoutBtn){
+        logoutBtn.addEventListener('click', (e)=>{
+            logout()
+        })
+    }
 }
 
-if(registerForm){
-    registerForm.addEventListener('submit', (e)=>{
-        e.preventDefault()
-        const formData = new FormData(e.target)
-        const data = Object.fromEntries(formData.entries())
-        register(data)
-        e.target.reset()
-    })
+function setupLoginForm(id){
+    const loginForm = document.getElementById(id)
+    if(loginForm){
+        loginForm.addEventListener('submit', (e)=>{
+            e.preventDefault()
+            const formData = new FormData(e.target)
+            const data = Object.fromEntries(formData.entries())
+            login(data)
+            e.target.reset()
+        })
+    }
 }
+function setupRegisterForm(id){
+    const registerForm = document.getElementById(id)
+    if(registerForm){
+        registerForm.addEventListener('submit', (e)=>{
+            e.preventDefault()
+            const formData = new FormData(e.target)
+            const data = Object.fromEntries(formData.entries())
+            register(data)
+            e.target.reset()
+        })
+    }
+
+}
+setupLogoutBtn('logoutBtn')
+setupLoginForm('loginForm')
+setupRegisterForm('registerForm')
+
 
 // telegram connect
 const telegramConBtn= document.getElementById('telegramConnectBtn')
@@ -421,5 +465,5 @@ document.addEventListener('DOMContentLoaded', async()=>{
     if (todoListDiv){
         loadTodos()
     }
-    store.user = await getUser()
+    // store.user = await getUser()
 })

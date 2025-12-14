@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+from django.utils import timezone
 class User(AbstractUser):
     telegram_id=models.CharField(max_length=50, blank=True, null=True)
     
@@ -42,7 +42,6 @@ class GroupMembership(models.Model):
     def __str__(self):
         return f"{self.user} in {self.group} ({self.role})"
 
-# Create your models here.
 class Todo(models.Model):
     
     class Status(models.IntegerChoices):
@@ -77,8 +76,24 @@ class Todo(models.Model):
         default=Status.TODO
     )
     
+    def save(self, *args, **kwargs):
+        if self.pk is not None:
+            old_status = (
+                Todo.objects.filter(pk=self.pk)
+                .values_list('status', flat=True).first()
+            )
+        else: 
+            old_status=None
+            
+        if self.status == self.Status.DONE and old_status != self.Status.DONE:
+            self.completed_at = timezone.now()
+            
+        if self.status != self.Status.DONE and old_status == self.Status.DONE:
+            self.completed_at = None
+        super().save(*args, **kwargs)
+    
     class Meta:
-        ordering = ['status', '-created_at']
+        ordering = ['status', '-created_at','-completed_at']
     
     def __str__(self):
         if self.group:

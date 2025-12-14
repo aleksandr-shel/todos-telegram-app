@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Todo, User, TaskGroup, GroupMembership
 from django.contrib.auth import authenticate
+from django.utils import timezone
 
     
 class UserPublicSerializer(serializers.ModelSerializer):
@@ -23,12 +24,10 @@ class GroupMembershipSerializer(serializers.ModelSerializer):
 
 class TaskGroupSerializer(serializers.ModelSerializer):
     owner = UserPublicSerializer(read_only=True)
-    members =  UserPublicSerializer(read_only=True, many=True)
-    memberships = GroupMembershipSerializer(read_only=True, many=True)
     class Meta:
         model = TaskGroup
         fields = [
-            "id", "name", "owner", "members", "memberships"
+            "id", "name", "owner"
         ]
         read_only_fields = ["id", "owner"]
 
@@ -39,6 +38,7 @@ class TaskGroupSerializer(serializers.ModelSerializer):
             group = group, user = request.user, role = GroupMembership.Role.OWNER
         )
         return group
+    
     
 class TodoSerializer(serializers.ModelSerializer):
     creator = UserPublicSerializer(read_only=True)
@@ -51,13 +51,25 @@ class TodoSerializer(serializers.ModelSerializer):
             'group', 'assignee', 'status', 'status_display'
         ]
         read_only_fields = ['id', 'creator', 'created_at']
-    
-    # def validate_assignee(self, user):
-    #     group = self.instance.group if self.instance else None
-    #     if group and not group.members.filter(pk=user.pk).exists():
-    #         raise serializers.ValidationError("User is not a member of this group.")
-    #     return user
+    def validate_due_date(self, value):
+        if value is None:
+            return None
+        if value < timezone.now():
+            raise serializers.ValidationError("Due date cannot be in the past.")
+        return value
 
+class TaskGroupDetailsSerializer(serializers.ModelSerializer):
+    owner = UserPublicSerializer(read_only=True)
+    # members =  UserPublicSerializer(read_only=True, many=True)
+    # memberships = GroupMembershipSerializer(read_only=True, many=True)
+    tasks = TodoSerializer(read_only=True, many=True)
+    class Meta:
+        model = TaskGroup
+        fields = [
+            "id", "name", "owner", "memberships", 'tasks'
+        ]
+        read_only_fields = ["id", "owner"]
+        
 class RegisterSerializer(serializers.ModelSerializer):
     
     class Meta:
