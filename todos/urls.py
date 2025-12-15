@@ -1,14 +1,17 @@
 from django.urls import path, re_path
-from .views import index, groups_page, LoginView, RegisterView, LogoutView, GetUserView, GroupListCreateView, GroupDetailsView, GroupMembershipListCreateView, GroupMembershipDetailsView
+from .views import index, groups_page
 from django.views.generic import TemplateView
-from .views.todos import TodoListCreateView, TodoDetailsView 
-
+from .views.todos_view import TodoListCreateView, TodoDetailsView 
+from .views.account_view import LoginView, RegisterView, LogoutView, GetUserView
+from .views.groups_view import GroupDetailsView, GroupListCreateView, GroupTasksView
+from .views.memberships_view import GroupMembershipDetailsView, GroupMembershipListCreateView
 
 urlpatterns = [
     path("api/todos/", TodoListCreateView.as_view()),
     path("api/todos/<int:pk>", TodoDetailsView.as_view()),
     path("api/groups/", GroupListCreateView.as_view()),
     path("api/groups/<int:pk>", GroupDetailsView.as_view()),
+    path("api/groups/<int:pk>/tasks", GroupTasksView.as_view()),
     path("api/groupmembers/<int:pk>", GroupMembershipDetailsView.as_view()),
     path("api/groupmembers/", GroupMembershipListCreateView.as_view()),
     path("api/account/login", LoginView.as_view()),

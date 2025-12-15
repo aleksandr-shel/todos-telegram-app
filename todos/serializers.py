@@ -43,14 +43,16 @@ class TaskGroupSerializer(serializers.ModelSerializer):
 class TodoSerializer(serializers.ModelSerializer):
     creator = UserPublicSerializer(read_only=True)
     status_display = serializers.CharField(source='get_status_display', read_only=True)
+    assignee_obj = UserPublicSerializer(source="assignee",read_only=True,allow_null = True)
     class Meta:
         model = Todo
         fields = [
             'id', 'title', 'description', 'creator',
             'created_at', 'due_date', 'completed_at',
-            'group', 'assignee', 'status', 'status_display'
+            'group', 'assignee', 'status', 'status_display',
+            "assignee_obj"
         ]
-        read_only_fields = ['id', 'creator', 'created_at']
+        read_only_fields = ['id', 'creator', 'created_at', 'assignee_obj']
     def validate_due_date(self, value):
         if value is None:
             return None

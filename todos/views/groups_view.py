@@ -1,17 +1,10 @@
-from django.shortcuts import render, redirect
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import AllowAny
-from rest_framework.exceptions import PermissionDenied
-from ..models import Todo, TaskGroup, GroupMembership, User
-from ..serializers import TodoSerializer, TaskGroupSerializer, RegisterSerializer, LoginSerializer, GroupMembershipSerializer, TaskGroupDetailsSerializer
+from ..models import TaskGroup, GroupMembership, Todo
+from ..serializers import TaskGroupSerializer, TaskGroupDetailsSerializer, TodoSerializer
 from django.shortcuts import get_object_or_404
-from django.contrib.auth import login, logout
 from django.db.models import Q
-from django.db import IntegrityError
-from django.core.exceptions import ObjectDoesNotExist
-from . import check_user_has_manage_permission
 
 class GroupListCreateView(APIView):
     
@@ -73,4 +66,10 @@ class GroupDetailsView(APIView):
             return Response({"detail":"только владелец может удалить группу"}, status=status.HTTP_403_FORBIDDEN)
         group.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
+
+class GroupTasksView(APIView):
+    # pk is group id 
+    def get(self, request, pk):
+        tasks = Todo.objects.filter(group_id = pk)
+        serializer = TodoSerializer(tasks, many=True)
+        return Response(serializer.data)
