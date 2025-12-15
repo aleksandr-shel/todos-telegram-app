@@ -427,6 +427,11 @@ setupLogoutBtn('logoutBtn')
 setupLoginForm('loginForm')
 setupRegisterForm('registerForm')
 
+// groups management
+
+async function loadUserGroups(){
+    
+}
 
 // telegram connect
 const telegramConBtn= document.getElementById('telegramConnectBtn')
