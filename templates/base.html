@@ -9,7 +9,7 @@
     {% csrf_token %}
     <meta name="csrf-token" content="{{csrf_token}}">
 </head>
-<body>
+<body data-page="{% block page_id %}{% endblock page_id %}">
     <div class="app-shell">
         <div id='notificationDiv' class='notifications-box'>
         </div>

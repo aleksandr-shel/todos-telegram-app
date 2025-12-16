@@ -10,7 +10,7 @@ const csrftoken = document.querySelector('meta[name="csrf-token"]').getAttribute
 const todoListDiv = document.getElementById('todolist')
 const sideMenu =  document.getElementById('sideMenu')
 const mainBox =  document.getElementById('main-box')
-
+const selectedTaskForm =  document.getElementById('selectedTaskForm')
 
 const store={
     user:{},
@@ -37,6 +37,10 @@ const store={
     setSelectedTask: function(task){
         this.selectedTask=task
     }
+}
+
+async function apiFetch(path, {method='GET', data=null} = {}){
+    // do later
 }
 
 function renderTask(task, listDiv, end = true){
@@ -231,7 +235,7 @@ function closeSideMenu(){
 }
 
 function setupAddTaskForm(id){
-    const addTaskForm = document.getElementById('add-task-form')
+    const addTaskForm = document.getElementById(id)
     if (addTaskForm){
     addTaskForm.addEventListener('submit', (e)=>{
         e.preventDefault()
@@ -367,26 +371,28 @@ async function logout(){
     }
 }
 
-async function fetchShortcut(url, data, method='POST'){
-    return await fetch(url,{
-        method: method,
-        headers:{
-            'Content-type':'application/json',
-            'X-CSRFToken': csrftoken
-        },
-        body: JSON.stringify(data)
-    })
-}
+// async function fetchShortcut(url, data, method='POST'){
+//     return await fetch(url,{
+//         method: method,
+//         headers:{
+//             'Content-type':'application/json',
+//             'X-CSRFToken': csrftoken
+//         },
+//         body: JSON.stringify(data)
+//     })
+// }
 
 async function handleBadResponse(response){
     const errorData = await response.json().catch(()=>null)
     let errorMessage = '';
-    for (const [field, msgs] of Object.entries(errorData)){
-        if (Array.isArray(msgs) && msgs.length){
-            errorMessage+=`${field}, ${msgs.join(' ')}`
+    if (errorData && typeof errorData === 'object'){
+        for (const [field, msgs] of Object.entries(errorData)){
+            if (Array.isArray(msgs) && msgs.length){
+                errorMessage+=`${field}, ${msgs.join(' ')}`
+            }
         }
     }
-    throw new Error(`${response.status} ${response.statusText}\n${errorMessage}`)
+    throw new Error(`${response.status} ${response.statusText}\n${errorMessage.trim()}`)
 }
 
 function setupLogoutBtn(id){
@@ -429,6 +435,7 @@ setupRegisterForm('registerForm')
 
 // groups management
 
+const groupListDiv = document.getElementById('')
 async function loadUserGroups(){
     
 }
@@ -439,7 +446,7 @@ const telegramConBtn= document.getElementById('telegramConnectBtn')
 function telegramConnect(){
     const userId= store.user.id
     console.log('userid',  userId)
-    // window.open(`https://t.me/tasks_shelukheev_bot?start=${userId}`, '_blank')
+    window.open(`https://t.me/tasks_shelukheev_bot?start=${userId}`, '_blank')
 }
 
 if (telegramConBtn){
@@ -470,5 +477,9 @@ document.addEventListener('DOMContentLoaded', async()=>{
     if (todoListDiv){
         loadTodos()
     }
-    // store.user = await getUser()
+
+    const page = document.body.dataset.page;
+    if (page === 'todos') console.log('todos')
+    if (page === 'groups') console.log('groups')
+    store.user = await getUser()
 })

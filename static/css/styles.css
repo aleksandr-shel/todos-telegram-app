@@ -190,6 +190,12 @@ body{
     }
 }
 
+/* groups page */
+
+.groups-grid{
+
+}
+
 /* notifications */
 .notifications-box{
     position: absolute;
@@ -211,4 +217,3 @@ body{
     height: 15px;
     width: 15px;
 }
-
