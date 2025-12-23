@@ -1,5 +1,5 @@
 from django.urls import path, re_path
-from .views import index, groups_page
+from .views import index, groups_page, create_group_page
 from django.views.generic import TemplateView
 from .views.todos_view import TodoListCreateView, TodoDetailsView 
 from .views.account_view import LoginView, RegisterView, LogoutView, GetUserView
@@ -20,6 +20,7 @@ urlpatterns = [
     path("api/account/logout", LogoutView.as_view()),
     path("login", TemplateView.as_view(template_name='login.html'), name='login-page'),
     path("register", TemplateView.as_view(template_name='register.html'), name='register-page'),
+    path("groups/create", create_group_page),
     path("groups", groups_page),
     path("", index)
 ]

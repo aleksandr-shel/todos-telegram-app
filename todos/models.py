@@ -11,6 +11,7 @@ class User(AbstractUser):
 class TaskGroup(models.Model):
     
     name = models.CharField(max_length=400)
+    created_at = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(
         User,
         related_name='owned_groups',
@@ -22,6 +23,9 @@ class TaskGroup(models.Model):
         related_name='task_groups'
     )
     
+    class Meta:
+        ordering=['-created_at']
+        
     def __str__(self):
         return self.name
 

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/groups">Группы</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Создать группу</li>
+        </ol>
+    </nav>
+    <form id="add-task-form" class="d-flex flex-column gap-2">
+        <div>
+            <input required type="text" name="name" class="form-control" maxlength="255" placeholder="Название группы">
+        </div>
+        <button type="submit" class="btn btn-primary">
+            Создать группу
+        </button>
+    </form>
+{% endblock content %}

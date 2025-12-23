@@ -1,11 +1,15 @@
 :root{
     --border: #d0d0d0;
     --pane-bg: #ffffff;
+    --bg-wh: #fff;
     --bg: #f3f3f5;
+    --bg2: #EAEAEA;
+    --hover: #2a9d8f;
     --accent: #2564cf; 
     --text-main: #1f1f1f;
     --text-muted: #666a73;
     --nav-height: 56px;
+    --border-radius-df: 0.375rem;
 }
 
 .app-shell{
@@ -52,10 +56,13 @@ body{
 
 .list-group-item{
     cursor: pointer;
+    background-color: var(--bg-wh);
+    /* transition: background-color 0.3s; */
 }
 
 .list-group-item:hover{
-    background-color: var(--bg);
+    background-color: var(--hover);
+    color: white;
 }
 
 .pane{
@@ -73,7 +80,7 @@ body{
     padding: 8px 10px;
     border-radius: 6px;
     cursor: pointer;
-    color: var(--text-muted)
+    color: var(--text-muted);
 }
 
 .nav-list li:hover {
@@ -93,7 +100,7 @@ body{
 
 #add-task-form{
     flex: 0 0 auto;
-    border-radius: 0.375rem;
+    border-radius: var(--border-radius-df);
     background-color: var(--bg);
     padding: 1rem;
 }
@@ -190,10 +197,43 @@ body{
     }
 }
 
-/* groups page */
+/* groups part */
 
-.groups-grid{
+.groups-list{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.groups-item{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 1rem;
+    padding: 3rem 2rem;
+    cursor: pointer;
+    background-color:var(--bg-wh);
+    border-radius: var(--border-radius-df);
+}
+.groups-item:hover{
+    background-color: var(--hover);
+}
+.group-layout{
+    display:grid;
+    grid-template-columns: 1fr 1fr 300px;
+}
+.left-col{
+    background-color: var(--bg);
+}
 
+.left-col ul{
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.left-col li{
+    padding: 15px;
+    border: 1px solid black;
 }
 
 /* notifications */

@@ -15,6 +15,10 @@ def groups_page(request):
         return redirect('login-page')
     return render(request, "groups.html")
 
+def create_group_page(request):
+    
+    return render(request, 'groups/create.html')
+
 def page404(request):
     
     return render(request, '404.html', status=404)

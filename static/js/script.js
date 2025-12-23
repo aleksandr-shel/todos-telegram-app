@@ -2,7 +2,7 @@
 const baseUrl = '/api/'
 const csrftoken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-
+// base nav
 
 
 
@@ -36,11 +36,55 @@ const store={
     },
     setSelectedTask: function(task){
         this.selectedTask=task
+    },
+    setGroups: function(groups){
+        this.groups = groups
+        renderGroups(this.groups)
+    }, 
+    selectGroup: function(group){
+        this.selectedGroup = group
+        loadOneGroup(this.selectedGroup.id)
+    },
+
+}
+
+async function apiRequest(url, method='GET', body=null, customHeaders={}){
+    const options = {
+        method,
+        headers: {
+            'Content-Type': 'application/json',
+            ...customHeaders
+        }
+    }
+    if (body && method !== 'GET') {
+        options.body = JSON.stringify(body);
+    }
+
+    try{
+        const response = await fetch(url, options)
+
+        if (!response.ok){
+            await handleBadResponse(response)
+        }
+
+        return await response.json()
+
+    }catch(error){
+        throw error
     }
 }
 
-async function apiFetch(path, {method='GET', data=null} = {}){
-    // do later
+async function handleBadResponse(response){
+    const errorData = await response.json().catch(()=>null)
+    let errorMessage = '';
+    if (errorData && typeof errorData === 'object'){
+        for (const [field, msgs] of Object.entries(errorData)){
+            if (Array.isArray(msgs) && msgs.length){
+                errorMessage+=`${field}, ${msgs.join(' ')}`
+            }
+        }
+    }
+    throw new Error(`${response.status} ${response.statusText}\n${errorMessage.trim()}`)
 }
 
 function renderTask(task, listDiv, end = true){
@@ -144,29 +188,16 @@ function fillSelectedTaskForm(){
 
 async function loadTodos(){
     try{
-        const response = await fetch(baseUrl+'todos/')
-        
-        if (!response.ok){
-            await handleBadResponse(response)
-        }
-
-        const data = await response.json()
-        
+        const data = await apiRequest(baseUrl+'todos/')
         const tasks = Array.isArray(data) ? data : []
         store.setTasks(tasks)
     }catch(err){
-        console.error(err)
-    }    
+        console.log('Ошибка при загрузке задач', err)
+    }
 }
 async function loadTodo(id){
     try{
-        const response = await fetch(baseUrl+'todos/' + id)
-        
-        if (!response.ok){
-            await handleBadResponse(response)
-        }
-
-        const task = await response.json()
+        const task = await apiRequest(baseUrl+'todos/'+id)
         console.log(task)
     }catch(err){
         console.error(err)
@@ -175,18 +206,7 @@ async function loadTodo(id){
 
 async function postTodo(todo){
     try{
-        const response = await fetch(baseUrl+'todos/', {
-            method: 'POST',
-            headers: {
-                'Content-type':'application/json'
-            },
-            body: JSON.stringify(todo)
-        })
-        if (!response.ok){
-            await handleBadResponse(response)
-        }
-        
-        const data = await response.json()
+        const data = await apiRequest(baseUrl+'todos/', 'POST', todo)
         store.addTask(data)
     }catch(err){
         console.error("Ошибка при создании задачи:", err)
@@ -210,20 +230,10 @@ async function deleteTodo(id){
 
 async function updateTodo(id, todo){
     try{
-        const response = await fetch(baseUrl+'todos/' + id,{
-            method:'PATCH',
-            headers: {
-                'Content-type':'application/json'
-            },
-            body: JSON.stringify(todo)
-        })
-        if (!response.ok){
-            await handleBadResponse(response)
-        }
-        const updatedTask = await response.json()
+        const updatedTask = await apiRequest(baseUrl+'todos/'+id, 'PATCH', todo)
         store.updateTask(id, updatedTask)
     }catch(err){
-        console.error("Ошибка:", err.message)
+        console.error("Ошибка при обновлении задачи:", err.message)
     }
 }
 
@@ -371,30 +381,6 @@ async function logout(){
     }
 }
 
-// async function fetchShortcut(url, data, method='POST'){
-//     return await fetch(url,{
-//         method: method,
-//         headers:{
-//             'Content-type':'application/json',
-//             'X-CSRFToken': csrftoken
-//         },
-//         body: JSON.stringify(data)
-//     })
-// }
-
-async function handleBadResponse(response){
-    const errorData = await response.json().catch(()=>null)
-    let errorMessage = '';
-    if (errorData && typeof errorData === 'object'){
-        for (const [field, msgs] of Object.entries(errorData)){
-            if (Array.isArray(msgs) && msgs.length){
-                errorMessage+=`${field}, ${msgs.join(' ')}`
-            }
-        }
-    }
-    throw new Error(`${response.status} ${response.statusText}\n${errorMessage.trim()}`)
-}
-
 function setupLogoutBtn(id){
     const logoutBtn= document.getElementById(id)
     if (logoutBtn){
@@ -435,10 +421,77 @@ setupRegisterForm('registerForm')
 
 // groups management
 
-const groupListDiv = document.getElementById('')
-async function loadUserGroups(){
-    
+const groupListBox = document.getElementById('groupListBox')
+const leftSideBurger = document.getElementById('leftSideBurger')
+function renderGroups(groups){
+    groups.forEach(group=>{
+        const box = document.createElement('li')
+        const contentBox= document.createElement('div')
+        // box.classList.add('d-flex', 'align-items-center')
+        box.classList.add('groups-item')
+        box.append(createSVGIcon())
+        box.append(contentBox)
+        contentBox.classList.add('ms-1')
+        contentBox.textContent=group.name
+        box.addEventListener('click', (e)=>{
+            // window.location.href=`/groups/${group.id}`
+            alert(`clicked group id: ${group.id}`)
+        })
+        groupListBox.append(box)
+    })
 }
+
+function createSVGIcon(){
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS, 'svg');
+    svg.setAttribute('width', '16')
+    svg.setAttribute('height', '16')
+    svg.setAttribute('viewBox', '0 0 16 16')
+
+    // svg.classList.add("bi", "bi-collection");
+
+    const path = document.createElementNS(svgNS, "path");
+    path.setAttribute("d", "M2.5 3.5a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1zm2-2a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1zM0 13a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 16 13V6a1.5 1.5 0 0 0-1.5-1.5h-13A1.5 1.5 0 0 0 0 6zm1.5.5A.5.5 0 0 1 1 13V6a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5z");
+
+    svg.appendChild(path);
+    return svg
+}
+
+async function postGroup(group){
+    try{
+        const data = await apiRequest(baseUrl+'groups/')
+    }catch(err){
+        console.log(err)
+    }
+}
+
+async function loadUserGroups(){
+    try{
+        const data = await apiRequest(baseUrl+'groups')
+        const groups = Array.isArray(data) ? data : []
+        store.setGroups(groups)
+    }catch(err){
+        console.log(err)
+    }
+}
+
+async function loadOneGroup(id){
+    try{
+        const group = await apiRequest(baseUrl+'groups/'+id)
+        console.log(group)
+    }catch(err){
+        console.log(err)
+    }
+}
+async function loadGroupTasks(id){
+    try{
+        const tasks = await apiRequest(baseUrl+'groups/'+id+'/tasks')
+        console.log(tasks)
+    }catch(err){
+        console.log(err)
+    }
+}
+
 
 // telegram connect
 const telegramConBtn= document.getElementById('telegramConnectBtn')
@@ -474,12 +527,16 @@ if (telegramConBtn){
 
 
 document.addEventListener('DOMContentLoaded', async()=>{
-    if (todoListDiv){
-        loadTodos()
-    }
-
     const page = document.body.dataset.page;
-    if (page === 'todos') console.log('todos')
-    if (page === 'groups') console.log('groups')
+    if (page === 'todos'){
+        if (todoListDiv){
+            loadTodos()
+        }
+    }
+    if (page === 'groups') {
+        if (groupListBox){
+            loadUserGroups()
+        }
+    }
     store.user = await getUser()
 })

@@ -27,9 +27,9 @@ class TaskGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskGroup
         fields = [
-            "id", "name", "owner"
+            "id", "name", "owner", "created_at"
         ]
-        read_only_fields = ["id", "owner"]
+        read_only_fields = ["id", "owner", "created_at"]
 
     def create(self, validated_data):
         request = self.context['request']
@@ -41,9 +41,11 @@ class TaskGroupSerializer(serializers.ModelSerializer):
     
     
 class TodoSerializer(serializers.ModelSerializer):
+    title = serializers.CharField(required=True, allow_blank=False)
     creator = UserPublicSerializer(read_only=True)
     status_display = serializers.CharField(source='get_status_display', read_only=True)
     assignee_obj = UserPublicSerializer(source="assignee",read_only=True,allow_null = True)
+    
     class Meta:
         model = Todo
         fields = [
@@ -59,6 +61,9 @@ class TodoSerializer(serializers.ModelSerializer):
         if value < timezone.now():
             raise serializers.ValidationError("Due date cannot be in the past.")
         return value
+    def validate_title(self,value:str) -> str:
+        max_len = Todo._meta.get_field('title').max_length
+        return value[:max_len]
 
 class TaskGroupDetailsSerializer(serializers.ModelSerializer):
     owner = UserPublicSerializer(read_only=True)
