@@ -55,7 +55,7 @@ class Todo(models.Model):
     
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
-    
+    to_notify = models.BooleanField(default=False)
     creator = models.ForeignKey(
         User, 
         related_name= 'created_tasks', 

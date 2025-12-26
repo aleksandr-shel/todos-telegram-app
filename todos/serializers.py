@@ -52,7 +52,7 @@ class TodoSerializer(serializers.ModelSerializer):
             'id', 'title', 'description', 'creator',
             'created_at', 'due_date', 'completed_at',
             'group', 'assignee', 'status', 'status_display',
-            "assignee_obj"
+            "assignee_obj", "to_notify"
         ]
         read_only_fields = ['id', 'creator', 'created_at', 'assignee_obj']
     def validate_due_date(self, value):

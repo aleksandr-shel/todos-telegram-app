@@ -432,10 +432,13 @@ function renderGroups(groups){
         box.append(createSVGIcon())
         box.append(contentBox)
         contentBox.classList.add('ms-1')
-        contentBox.textContent=group.name
+        const spanName = document.createElement('span')
+        contentBox.append(spanName)
+        
+        spanName.textContent = `${group.name}`
         box.addEventListener('click', (e)=>{
-            // window.location.href=`/groups/${group.id}`
-            alert(`clicked group id: ${group.id}`)
+            window.location.href=`/groups/${group.id}`
+            // alert(`clicked group id: ${group.id}`)
         })
         groupListBox.append(box)
     })
@@ -444,9 +447,9 @@ function renderGroups(groups){
 function createSVGIcon(){
     const svgNS = 'http://www.w3.org/2000/svg';
     const svg = document.createElementNS(svgNS, 'svg');
-    svg.setAttribute('width', '16')
-    svg.setAttribute('height', '16')
-    svg.setAttribute('viewBox', '0 0 16 16')
+    svg.setAttribute('width', 16)
+    svg.setAttribute('height', 16)
+    svg.setAttribute('viewBox', `0 0 16 16`)
 
     // svg.classList.add("bi", "bi-collection");
 
@@ -491,7 +494,12 @@ async function loadGroupTasks(id){
         console.log(err)
     }
 }
-
+function getGroupIdFromPath(){
+    const parts = window.location.pathname.split('/').filter(Boolean)
+    if (parts[0] !== 'groups' || !parts[1]) return null
+    const id = Number(parts[1])
+    return Number.isFinite(id) ? id : null
+}
 
 // telegram connect
 const telegramConBtn= document.getElementById('telegramConnectBtn')
