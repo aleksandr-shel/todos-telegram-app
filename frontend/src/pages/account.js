@@ -1,4 +1,4 @@
-import {baseUrl, csrftoken} from '../common/api'
+import {baseUrl, csrftoken, handleBadResponse} from '../common/api'
 
 export function initAccount(){
     const responseMessageSpan = document.getElementById('response-message')

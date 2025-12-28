@@ -1,19 +1,21 @@
 {% extends "base.html" %}
 
-
-<div class="group-layout">
-    <div class="left-col">
-        <button class="leftSideBurger">
-            &#9776
-        </button>
-        <ul id="groupsBox">
-            
-        </ul>
+{% block page_id %}group{% endblock page_id %}
+{% block content %}
+    <div class="group-layout">
+        <div class="left-col">
+            <button class="leftSideBurger">
+                &#9776
+            </button>
+            <ul id="groupsBox">
+                
+            </ul>
+        </div>
+        <div>
+            tasks
+        </div>
+        <div>
+            selected task
+        </div>
     </div>
-    <div>
-        tasks
-    </div>
-    <div>
-        selected task
-    </div>
-</div>
+{% endblock content %}

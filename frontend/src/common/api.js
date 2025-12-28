@@ -20,8 +20,9 @@ export async function apiRequest(path, method='GET', body=null, customHeaders={}
             await handleBadResponse(response)
         }
 
-        return await response.json()
-
+        const text = await response.text()
+        
+        return text ? JSON.parse(text) : null
     }catch(error){
         throw error
     }
