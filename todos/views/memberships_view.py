@@ -80,8 +80,12 @@ class GroupMembershipDetailsView(APIView):
     # get group members
     # pk is group_id
     def get(self, request, pk):
+        group = get_object_or_404(TaskGroup, pk = pk)
+        if not group.members.filter(id = request.user.id).exists():
+            print('не в группе')
+            return Response({"details":"не в группе"}, status=status.HTTP_403_FORBIDDEN)
         members = GroupMembership.objects.filter(group_id = pk)
-        print(members)
+        
         serializer = GroupMembershipSerializer(members, many=True)
         return Response(serializer.data)
 
@@ -95,11 +99,16 @@ class GroupMembershipDetailsView(APIView):
             membership = serializer.save()
             return Response(GroupMembershipSerializer(membership).data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    # kick user from the group
+    # kick user from the group/
     # pk is group membership id
     def delete(self, request, pk):
         membership = get_object_or_404(GroupMembership, pk = pk)
-        check_user_has_manage_permission(membership.group, request.user)
-        membership.delete()
+        if membership.user.id == request.user.id:
+            # user leaves the group
+            membership.delete()
+        else:
+            # user is kicked from the group
+            check_user_has_manage_permission(membership.group, request.user)
+            membership.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     

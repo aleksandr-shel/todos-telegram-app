@@ -17,5 +17,11 @@ export async function initGroup(){
             console.log(err)
         }
     }
-    console.log(window.location.pathname.split('/'))
+    function getGroupIdFromPath(){
+        const parts = window.location.pathname.split('/').filter(Boolean)
+        if (parts[0] !== 'groups' || !parts[1]) return null
+        const id = Number(parts[1])
+        return Number.isFinite(id) ? id : null
+    }
+    console.log(getGroupIdFromPath())
 }

@@ -23,11 +23,15 @@ export const store={
     },
     setGroups: function(groups){
         this.groups = groups
-        // renderGroups(this.groups)
     }, 
-    selectGroup: function(group){
+    setSelectedGroup: function(group){
         this.selectedGroup = group
-        // loadOneGroup(this.selectedGroup.id)
     },
+    addGroup: function(group){
+        this.groups.unshift(group)
+    },
+    deleteGroup:function(id){
+        this.groups = this.groups.filter(group => group.id !== id)
+    }
 
 }

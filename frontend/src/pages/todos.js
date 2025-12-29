@@ -167,17 +167,17 @@ export async function initTodos(){
     function setupAddTaskForm(id){
         const addTaskForm = document.getElementById(id)
         if (addTaskForm){
-        addTaskForm.addEventListener('submit', (e)=>{
-            e.preventDefault()
-            const formData = new FormData(e.target)
-            const data = Object.fromEntries(formData.entries())
-            if (data.due_date===''){
-                data.due_date=null
-            }
-            postTodo(data)
-            e.target.reset()
-        })
-    }
+            addTaskForm.addEventListener('submit', (e)=>{
+                e.preventDefault()
+                const formData = new FormData(e.target)
+                const data = Object.fromEntries(formData.entries())
+                if (data.due_date===''){
+                    data.due_date=null
+                }
+                postTodo(data)
+                e.target.reset()
+            })
+        }
     }
 
     function setupSideMenuForm(id){

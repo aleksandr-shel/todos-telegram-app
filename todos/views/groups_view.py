@@ -33,7 +33,7 @@ class GroupDetailsView(APIView):
         return group
     def get(self, request, pk):
         group = self.get_object(request,pk)
-        print(type(group))
+        
         if group is None:
             return Response({"detail":"не найден"}, status=status.HTTP_404_NOT_FOUND)
         serializer = TaskGroupDetailsSerializer(group)
