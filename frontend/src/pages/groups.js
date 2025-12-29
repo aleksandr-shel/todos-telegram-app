@@ -42,40 +42,19 @@ export async function initGroups(){
         return svg
     }
 
-    async function postGroup(group){
-        try{
-            const data = await apiRequest('groups/')
-        }catch(err){
-            console.log(err)
-        }
-    }
+    
 
     async function loadUserGroups(){
         try{
             const data = await apiRequest('groups')
             const groups = Array.isArray(data) ? data : []
             store.setGroups(groups)
+            renderGroups(store.groups)
         }catch(err){
             console.log(err)
         }
     }
 
-    async function loadOneGroup(id){
-        try{
-            const group = await apiRequest('groups/'+id)
-            console.log(group)
-        }catch(err){
-            console.log(err)
-        }
-    }
-    async function loadGroupTasks(id){
-        try{
-            const tasks = await apiRequest('groups/'+id+'/tasks')
-            console.log(tasks)
-        }catch(err){
-            console.log(err)
-        }
-    }
     function getGroupIdFromPath(){
         const parts = window.location.pathname.split('/').filter(Boolean)
         if (parts[0] !== 'groups' || !parts[1]) return null
