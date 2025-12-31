@@ -6,6 +6,9 @@ export const store={
     tasks:[],
     groups:[],
     selectedGroup:null,
+    setUser: function(user){
+        this.user = user
+    },
     setTasks: function(tasks){
         this.tasks = tasks
     },

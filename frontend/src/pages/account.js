@@ -1,6 +1,6 @@
 import {baseUrl, csrftoken, handleBadResponse} from '../common/api'
-
-export function initAccount(){
+import { store } from '../common/store'
+export async function initAccount(){
     const responseMessageSpan = document.getElementById('response-message')
 
     async function login(data){
@@ -114,5 +114,12 @@ export function initAccount(){
     setupLogoutBtn('logoutBtn')
     setupLoginForm('loginForm')
     setupRegisterForm('registerForm')
+
+    try{
+        const user = await getUser()
+        store.setUser(user)
+    }catch(err){
+        console.log(err)
+    }
 
 }

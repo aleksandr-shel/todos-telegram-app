@@ -29,8 +29,6 @@ export async function initTodos(){
             spanDueDate.textContent=`${new Date(task.due_date).toLocaleDateString()}`
         }
 
-        
-
         viewDiv.append(spanTitle)
         viewDiv.append(spanStatus)
         viewDiv.append(spanDueDate)
@@ -73,9 +71,23 @@ export async function initTodos(){
         }
     }
 
+    function setupShowHideBtn(id){
+        const btn = document.getElementById(id)
+        // const btns = document 
+
+        btn.addEventListener('click', (e)=>{
+            
+            const disappearables = document.querySelectorAll('.disappearable')
+            disappearables.forEach(dis=>{
+                dis.classList.toggle('hidden')
+            })
+        })
+    }
+    setupShowHideBtn('btn-show')
+    setupShowHideBtn('btn-hide')
     setupTextareaAutoResize('selectTaskDescription')
     setupTextareaAutoResize('addTaskDescription')
-
+    
     function fillSelectedTaskForm(){
         if (store.selectedTask){
             Object.keys(store.selectedTask).forEach(key=>{

@@ -197,6 +197,10 @@ body{
     }
 }
 
+.carets i{
+    cursor: pointer;
+}
+
 /* groups part */
 
 .groups-list{
@@ -205,6 +209,7 @@ body{
     padding: 0;
 }
 .groups-item{
+    overflow: hidden;
     display:flex;
     flex-direction: row;
     align-items: center;
@@ -234,6 +239,19 @@ body{
 .left-col li{
     padding: 15px;
     border: 1px solid black;
+}
+
+#addGroupForm{
+    min-width: 350px;
+    width: 60vw;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#addGroupForm > *{
+    margin-bottom: 0.5rem;
 }
 
 /* notifications */

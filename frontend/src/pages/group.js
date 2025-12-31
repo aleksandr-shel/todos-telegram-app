@@ -1,10 +1,13 @@
-
-
+import {store} from '../common/store'
+import {apiRequest} from '../common/api'
 export async function initGroup(){
+    const leftSideBurger = document.getElementById('leftSideBurger')
+
     async function loadOneGroup(id){
         try{
             const group = await apiRequest('groups/'+id)
-            console.log(group)
+            store.setSelectedGroup(group)
+            
         }catch(err){
             console.log(err)
         }
@@ -23,5 +26,6 @@ export async function initGroup(){
         const id = Number(parts[1])
         return Number.isFinite(id) ? id : null
     }
-    console.log(getGroupIdFromPath())
+
+    await loadOneGroup(getGroupIdFromPath())
 }

@@ -25,5 +25,5 @@ export async function initGroupCreate(){
         }
     }
 
-    setupAddGroupForm('addTaskForm')
+    setupAddGroupForm('addGroupForm')
 }
