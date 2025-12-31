@@ -71,20 +71,24 @@ export async function initTodos(){
         }
     }
 
-    function setupShowHideBtn(id){
-        const btn = document.getElementById(id)
-        // const btns = document 
-
-        btn.addEventListener('click', (e)=>{
-            
-            const disappearables = document.querySelectorAll('.disappearable')
-            disappearables.forEach(dis=>{
-                dis.classList.toggle('hidden')
+    function setupShowHideBtns(ids){
+        const btns = ids.map(id => {
+            const btn = document.getElementById(id)
+            return btn
+        })
+        btns.forEach(btn =>{
+            btn.addEventListener('click', (e)=>{
+                btns.forEach(bt=>{
+                    bt.classList.toggle('hidden')
+                })
+                const disappearables = document.querySelectorAll('.disappearable')
+                disappearables.forEach(dis=>{
+                    dis.classList.toggle('hidden')
+                })
             })
         })
     }
-    setupShowHideBtn('btn-show')
-    setupShowHideBtn('btn-hide')
+    setupShowHideBtns(['btn-show','btn-hide'])
     setupTextareaAutoResize('selectTaskDescription')
     setupTextareaAutoResize('addTaskDescription')
     

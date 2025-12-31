@@ -33,6 +33,9 @@ body{
 /* tasks and groups  */
 
 
+.disappearable{
+    /* transition: opacity 0.4s, transform 0.4s, display 0.4s allow-discrete; */
+}
 .task-title{
     flex-grow: 1;           
     text-overflow: ellipsis; 
