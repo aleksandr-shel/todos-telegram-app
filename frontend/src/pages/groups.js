@@ -9,19 +9,25 @@ export async function initGroups(){
             const box = document.createElement('li')
             box.classList.add('groups-item')
 
-            const icon = document.createElement('i')
-            icon.classList.add('bi', 'bi-collection')
-            icon.style.fontSize='x-large'
-            box.append(icon)
 
             const contentBox= document.createElement('div')
-            box.append(contentBox)
             contentBox.classList.add('ms-1')
+            box.append(contentBox)
+
+            const icon = document.createElement('i')
+            icon.classList.add('bi', 'bi-collection', 'me-1')
+            icon.style.fontSize='x-large'
+            contentBox.append(icon)
 
             const spanName = document.createElement('span')
-            contentBox.append(spanName)
-            
             spanName.textContent = `${group.name}`
+            contentBox.append(spanName)
+
+            const divOwner = document.createElement('div')
+            divOwner.textContent = `Владелец: ${group.owner.username}`
+            divOwner.style.fontSize='x-small'
+            box.append(divOwner)
+
             box.addEventListener('click', (e)=>{
                 window.location.href=`/groups/${group.id}`
             })

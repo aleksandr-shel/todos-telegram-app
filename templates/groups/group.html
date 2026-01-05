@@ -2,23 +2,86 @@
 
 {% block page_id %}group{% endblock page_id %}
 {% block content %}
-    <div class="group-layout">
-        <div class="left-col">
-            <button class="leftSideBurger">
-                <i class="bi bi-list"></i>
-            </button>
-            <ul id="groupsBox">
-                
-            </ul>
-        </div>
-        <div id="">
-            
-        </div>
-        <div>
-            selected task
-        </div>
-    </div>
 <main class="group-layout">
+    <button id="leftSideBurger">
+        <i class="bi bi-list"></i>
+    </button>
+    <aside class="group-left-pane">
+        <div class="groups-list" id="groupsBox">
+            <li class="groups-item"><div class="ms-1"><i class="bi bi-collection me-1" style="font-size: x-large;"></i><span>komanda</span></div><div style="font-size: x-small;">Владелец: b</div></li>
+            <li class="groups-item"><div class="ms-1"><i class="bi bi-collection me-1" style="font-size: x-large;"></i><span>komanda</span></div><div style="font-size: x-small;">Владелец: a</div></li>
+            <li class="groups-item"><div class="ms-1"><i class="bi bi-collection me-1" style="font-size: x-large;"></i><span>komanda</span></div><div style="font-size: x-small;">Владелец: a</div></li>
+            <li class="groups-item"><div class="ms-1"><i class="bi bi-collection me-1" style="font-size: x-large;"></i><span>sadasdasmlkdaskdmaslkdakdmlaksdmlaksmdalksmdalsdmalksmdlaksmdalksmdlasmdlkasdmlaksmdlksadmalkmdlaskdklasmdlkasmdlkasdmlkamdlaskdmalskdmaksldaldmaslkdmaslkdmakdmaslkdmasldmaslkdmaslkdmasdkasmdlamsdlkamsldkmflkemflkewmfewmfwlefmwelfkmwelfmweflekwmflwfmwelkf</span></div><div style="font-size: x-small;">Владелец: a</div></li>
+        </div>
+    </aside>
+    <section class="pane group-center-pane">
+        <form id="add-task-form" class="d-flex flex-column gap-2">
+            <div>
+                <input required="" type="text" name="title" class="form-control" maxlength="255" placeholder="Добавить задачу">
+            </div>
+            <div class="carets">
+                <i class="bi bi-caret-down" title="Показать примечание" id="btn-show"></i>
+                <i class="bi bi-caret-up hidden" title="Скрыть примечание" id="btn-hide"></i>
+            </div>
+            <div class="disappearable hidden">
+                <textarea class="form-control" name="description" id="addTaskDescription" placeholder="Добавить примечание" style="max-height: 500px;"></textarea>
+            </div>
+            <div class="disappearable hidden">
+                <label class="form-label" for="addDueDate">
+                    Срок выполнения:
+                </label>
+                <input class="form-control" style="width:350px;" id="addDueDate" type="date" name="due_date">
+            </div>
+            <button type="submit" class="btn btn-primary">
+                Добавить
+            </button>
+        </form>
+        <div id="taskslist" class="tasks-list">
+            
+            <div class="list-group-item"><div class="list-group-item-view"><span class="task-title">do something fun</span><span class="status-3" style="font-size: 0.6rem;">Выполнено</span><span style="font-size: 0.6rem;">05/01/2026</span></div></div>
+            <div class="list-group-item"><div class="list-group-item-view"><span class="task-title">do something fun</span><span class="status-3" style="font-size: 0.6rem;">Выполнено</span><span style="font-size: 0.6rem;">05/01/2026</span></div></div>
+            <div class="list-group-item"><div class="list-group-item-view"><span class="task-title">do something fun</span><span class="status-3" style="font-size: 0.6rem;">Выполнено</span><span style="font-size: 0.6rem;">05/01/2026</span></div></div>
+            <div class="list-group-item"><div class="list-group-item-view"><span class="task-title">do something fun</span><span class="status-3" style="font-size: 0.6rem;">Выполнено</span><span style="font-size: 0.6rem;">05/01/2026</span></div></div>
+            <div class="list-group-item"><div class="list-group-item-view"><span class="task-title">do something fun</span><span class="status-3" style="font-size: 0.6rem;">Выполнено</span><span style="font-size: 0.6rem;">05/01/2026</span></div></div>
+        </div>
+    </section>
+    <aside id="sideMenu" class="pane group-right-pane">
+        <button id="sideMenu-closebtn" class="close-btn"></button>
+        <form id="selectedTaskForm" class="d-flex flex-column gap-1">
+            <div>
+                <label for="selectTaskTitle">
+                    Название
+                </label>
+                <input class="form-control" id="selectTaskTitle" name="title" placeholder="Название задачи">
+            </div>
+            <div>
+                <textarea id="selectTaskDescription" name="description" placeholder="Добавить примечание" class="form-control"></textarea>
+            </div>
+            <div>
+                <label for="selectTaskDueDate">
+                    Срок выполнения
+                </label>
+                <input class="form-control" type="date" id="selectTaskDueDate" name="due_date">
+            </div>
+            <div>
+                <select name="status" class="form-select">
+                    <option value="1">К выполнению</option>
+                    <option value="2">В процессе</option>
+                    <option value="3">Выволнено</option>
+                </select>
+            </div>
+            <div>
+                <button class="btn btn-dark w-100" type="submit">
+                    Сохранить
+                </button>
+            </div>
+        </form>
 
+        <div>
+            <button class="btn btn-secondary w-100" id="deleteTaskBtn">
+                Удалить
+            </button>
+        </div>
+    </aside>
 </main>
 {% endblock content %}

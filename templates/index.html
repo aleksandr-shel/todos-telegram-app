@@ -44,6 +44,10 @@
                     Название
                 </label>
                 <input class="form-control" id="selectTaskTitle" name="title" placeholder="Название задачи">
+                {% comment %} <textarea class="form-control" id="selectTaskTitle" name="title" placeholder="Название задачи"></textarea> {% endcomment %}
+            </div>
+            <div>
+                <textarea id="selectTaskDescription" name="description" placeholder="Добавить примечание" class="form-control"></textarea>
             </div>
             <div>
                 <label for="selectTaskDueDate">
@@ -57,9 +61,6 @@
                     <option value="2">В процессе</option>
                     <option value="3">Выволнено</option>
                 </select>
-            </div>
-            <div>
-                <textarea id="selectTaskDescription" name="description" placeholder="Добавить примечание" class="form-control"></textarea>
             </div>
             <div>
                 <button class="btn btn-dark w-100" type="submit">

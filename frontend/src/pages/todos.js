@@ -1,9 +1,9 @@
 import {store} from '../common/store'
 import { apiRequest} from '../common/api'
+import { sideMenu, closeSideMenu, setupSideMenuCloseBtn } from '../common/functionality'
 
 export async function initTodos(){
     const todoListDiv = document.getElementById('todolist')
-    const sideMenu =  document.getElementById('sideMenu')
     const mainBox =  document.getElementById('main-box')
     const selectedTaskForm =  document.getElementById('selectedTaskForm')
 
@@ -11,8 +11,8 @@ export async function initTodos(){
         const itemDiv = document.createElement('div')
         const viewDiv = document.createElement('div')
         itemDiv.classList.add('list-group-item')
-        viewDiv.classList.add('d-flex','flex-column', 'justify-content-between', 'gap-1')
-        
+
+        viewDiv.classList.add('list-group-item-view')
         //Описание задачи
         const spanTitle = document.createElement('span')
         spanTitle.classList.add('task-title')
@@ -22,6 +22,7 @@ export async function initTodos(){
         const spanStatus = document.createElement('span')
         spanStatus.style.fontSize='0.6rem'
         spanStatus.textContent=`${task.status_display}`
+        spanStatus.classList.add(`status-${task.status}`)
 
         const spanDueDate = document.createElement('span')
         spanDueDate.style.fontSize='0.6rem'
@@ -36,6 +37,10 @@ export async function initTodos(){
         itemDiv.append(viewDiv)
         itemDiv.addEventListener('click',(e)=>{
             store.setSelectedTask(task)
+            document.querySelectorAll('.task-selected').forEach(el =>{
+                el.classList.remove('task-selected')
+            })
+            itemDiv.classList.add('task-selected')
             sideMenu.classList.remove('hidden')
             mainBox.classList.add('task-selected')
             fillSelectedTaskForm()
@@ -173,13 +178,6 @@ export async function initTodos(){
         }
     }
 
-
-    function closeSideMenu(){
-        sideMenu.classList.add('hidden')
-        mainBox.classList.remove('task-selected')
-        store.setSelectedTask(null)
-    }
-
     function setupAddTaskForm(id){
         const addTaskForm = document.getElementById(id)
         if (addTaskForm){
@@ -190,6 +188,7 @@ export async function initTodos(){
                 if (data.due_date===''){
                     data.due_date=null
                 }
+                console.log('creating todo:\n',data)
                 postTodo(data)
                 e.target.reset()
             })
@@ -214,14 +213,6 @@ export async function initTodos(){
         }
     }
 
-    function setupSideMenuCloseBtn(id){
-        const sideMenuCloseBtn =  document.getElementById(id)
-        if (sideMenuCloseBtn){
-            sideMenuCloseBtn.addEventListener('click',(e)=>{
-                closeSideMenu()
-            })
-        }
-    }
 
     function setupDeleteTaskBtn(id){
         const deleteTaskBtn = document.getElementById(id)

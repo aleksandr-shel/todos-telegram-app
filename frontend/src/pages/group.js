@@ -1,13 +1,14 @@
 import {store} from '../common/store'
 import {apiRequest} from '../common/api'
+import { sideMenu, closeSideMenu} from '../common/functionality'
+
 export async function initGroup(){
     const leftSideBurger = document.getElementById('leftSideBurger')
-
     async function loadOneGroup(id){
         try{
             const group = await apiRequest('groups/'+id)
             store.setSelectedGroup(group)
-            
+            console.log(store.selectedGroup)
         }catch(err){
             console.log(err)
         }
