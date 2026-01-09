@@ -55,11 +55,12 @@ body{
     border-radius: var(--border-radius-df);
     border: var(--border) 1px solid;
     margin-top: 0.5rem;
-    flex: 1 1 auto;
-    min-height: 0;
     overflow: auto;
-}
 
+}
+.tasks-list:empty{
+    border: none;
+}
 .tasks-list > div:not(:last-child){
     border-bottom: var(--border) 1px solid;
 }
@@ -109,7 +110,10 @@ body{
     padding: 10px;
 }
 .pane-left{
+    display: flex;
+    flex-direction: column;
     padding-right: 0;
+    min-height: 0;
     max-width: 200px;
 }
 .nav-list{
@@ -244,9 +248,12 @@ body{
 /* groups part */
 
 .groups-list{
-    list-style-type: none;
+    list-style: none;
     margin: 0;
     padding: 0;
+    overflow: auto;
+    flex: 1 1 auto;
+    min-height: 0;
 }
 .groups-item{
     overflow: auto;
@@ -279,12 +286,14 @@ body{
 /* group page */
 .group-layout{
     display:grid;
-    grid-template-columns: max-content 1fr 340px;
+    grid-template-columns: max-content 1fr;
     grid-template-rows: 1fr;
     background: var(--bg);
     height: calc(100vh - var(--nav-height));
 }
-
+.group-layout.task-selected{
+    grid-template-columns: max-content 1fr 340px;
+}
 #leftSideBtn{
     border-radius: var(--border-radius-df);
     border: 0;
@@ -295,7 +304,11 @@ body{
 #leftSideBtn:hover{
     background-color: #e7e8ea;;
 }
-
+#groupName{
+    overflow: hidden;
+    max-width: 90vw;
+    text-overflow: ellipsis;
+}
 /* notifications */
 .notifications-box{
     position: absolute;

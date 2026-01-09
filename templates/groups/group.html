@@ -2,22 +2,17 @@
 
 {% block page_id %}group{% endblock page_id %}
 {% block content %}
-<main class="group-layout">
+<main id='group-box' class="group-layout">
     <aside class="pane pane-left">
         <button id="leftSideBtn">
             <i class="bi bi-list"></i>
             <i class="bi bi-arrow-bar-left hidden"></i>
         </button>
-        <div class="groups-list hidden" id="groupsBox">
-            <li class="groups-item"><div class="ms-1"><i class="bi bi-collection me-1" style="font-size: x-large;"></i><span>komanda</span></div><div style="font-size: x-small;">Владелец: b</div></li>
-            <li class="groups-item"><div class="ms-1"><i class="bi bi-collection me-1" style="font-size: x-large;"></i><span>komanda</span></div><div style="font-size: x-small;">Владелец: a</div></li>
-            <li class="groups-item"><div class="ms-1"><i class="bi bi-collection me-1" style="font-size: x-large;"></i><span>komanda</span></div><div style="font-size: x-small;">Владелец: a</div></li>
-            <li class="groups-item"><div class="ms-1"><i class="bi bi-collection me-1" style="font-size: x-large;"></i><span>sadasdasmlkdaskdmaslkdakdmlaksdmlaksmdalksmdalsdmalksmdlaksmdalksmdlasmdlkasdmlaksmdlksadmalkmdlaskdklasmdlkasmdlkasdmlkamdlaskdmalskdmaksldaldmaslkdmaslkdmakdmaslkdmasldmaslkdmaslkdmasdkasmdlamsdlkamsldkmflkemflkewmfewmfwlefmwelfkmwelfmweflekwmflwfmwelkf</span></div><div style="font-size: x-small;">Владелец: a</div></li>
-        </div>
+        <ul class="groups-list hidden" id="groupsBox"></ul>
     </aside>
     <section class="pane pane-center">
-        <h3>
-            GROUP TITLE
+        <h3 id="groupName">
+            GROUP NAME
         </h3>
         <form id="add-task-form" class="d-flex flex-column gap-2">
             <div>
@@ -40,17 +35,9 @@
                 Добавить
             </button>
         </form>
-        <div id="taskslist" class="tasks-list">
-            
-            <div class="list-group-item"><div class="list-group-item-view"><span class="task-title">do something fun</span><span class="status-3" style="font-size: 0.6rem;">Выполнено</span><span style="font-size: 0.6rem;">05/01/2026</span></div></div>
-            <div class="list-group-item"><div class="list-group-item-view"><span class="task-title">do something fun</span><span class="status-3" style="font-size: 0.6rem;">Выполнено</span><span style="font-size: 0.6rem;">05/01/2026</span></div></div>
-            <div class="list-group-item"><div class="list-group-item-view"><span class="task-title">do something fun</span><span class="status-3" style="font-size: 0.6rem;">Выполнено</span><span style="font-size: 0.6rem;">05/01/2026</span></div></div>
-            <div class="list-group-item"><div class="list-group-item-view"><span class="task-title">do something fun</span><span class="status-3" style="font-size: 0.6rem;">Выполнено</span><span style="font-size: 0.6rem;">05/01/2026</span></div></div>
-            <div class="list-group-item"><div class="list-group-item-view"><span class="task-title">do something fun</span><span class="status-3" style="font-size: 0.6rem;">Выполнено</span><span style="font-size: 0.6rem;">05/01/2026</span></div></div>
-            <div class="list-group-item"><div class="list-group-item-view"><span class="task-title">do something fun</span><span class="status-3" style="font-size: 0.6rem;">Выполнено</span><span style="font-size: 0.6rem;">05/01/2026</span></div></div>
-        </div>
+        <div id="taskslist" class="tasks-list"></div>
     </section>
-    <aside id="sideMenu" class="pane pane-right">
+    <aside id="sideMenu" class="pane pane-right hidden">
         <button id="sideMenu-closebtn" class="close-btn"></button>
         <form id="selectedTaskForm" class="d-flex flex-column gap-1">
             <div>
