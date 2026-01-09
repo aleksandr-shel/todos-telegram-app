@@ -1,9 +1,8 @@
 import {store} from '../common/store'
 import {apiRequest} from '../common/api'
-import { sideMenu, closeSideMenu} from '../common/functionality'
+import { setupSideMenuCloseBtn} from '../common/functionality'
 
 export async function initGroup(){
-    const leftSideBurger = document.getElementById('leftSideBurger')
     async function loadOneGroup(id){
         try{
             const group = await apiRequest('groups/'+id)
@@ -27,6 +26,22 @@ export async function initGroup(){
         const id = Number(parts[1])
         return Number.isFinite(id) ? id : null
     }
+
+    function setupLeftSideBtn(id){
+        const leftSideBurger = document.getElementById(id)
+        leftSideBurger.addEventListener('click',(e)=>{
+            const groupBox = document.getElementById('groupsBox')
+            groupBox.classList.toggle('hidden')
+            
+            const icons = Array.from(leftSideBurger.children)
+            icons.forEach(icon =>{
+                icon.classList.toggle('hidden')
+            })
+        })
+    }
+
+    setupLeftSideBtn('leftSideBtn')
+    setupSideMenuCloseBtn('sideMenu-closebtn')
 
     await loadOneGroup(getGroupIdFromPath())
 }

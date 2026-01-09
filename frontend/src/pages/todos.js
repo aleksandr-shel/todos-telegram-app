@@ -208,6 +208,7 @@ export async function initTodos(){
                     }
                     updateTodo(store.selectedTask.id, data)
                     closeSideMenu()
+                    store.setSelectedTask(null)
                 }
             })
         }
@@ -221,6 +222,7 @@ export async function initTodos(){
                 if (store.selectedTask){
                     await deleteTodo(store.selectedTask.id)
                     closeSideMenu()
+                    store.setSelectedTask(null)
                 }
             })
         }

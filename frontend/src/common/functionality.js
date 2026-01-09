@@ -8,7 +8,6 @@ function closeSideMenu(){
     })
     sideMenu.classList.add('hidden')
     // mainBox.classList.remove('task-selected')
-    store.setSelectedTask(null)
 }
 
 function setupSideMenuCloseBtn(id){

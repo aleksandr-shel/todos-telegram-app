@@ -51,7 +51,21 @@ body{
     grid-template-columns: minmax(0, 1fr) 340px;
 }
 
+.tasks-list{
+    border-radius: var(--border-radius-df);
+    border: var(--border) 1px solid;
+    margin-top: 0.5rem;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
+}
+
+.tasks-list > div:not(:last-child){
+    border-bottom: var(--border) 1px solid;
+}
+
 .list-group-item{
+    padding: 1rem;
     cursor: pointer;
     background-color: var(--bg-wh);
 }
@@ -94,7 +108,10 @@ body{
     background: var(--pane-bg);
     padding: 10px;
 }
-
+.pane-left{
+    padding-right: 0;
+    max-width: 200px;
+}
 .nav-list{
     list-style: none;
     padding: 0;
@@ -128,11 +145,6 @@ body{
     border-radius: var(--border-radius-df);
     background-color: var(--bg);
     padding: 1rem;
-}
-#todolist{
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow: auto;
 }
 
 .pane-right{
@@ -237,7 +249,7 @@ body{
     padding: 0;
 }
 .groups-item{
-    overflow: hidden;
+    overflow: auto;
     display:flex;
     flex-direction: column;
     align-items:flex-start;
@@ -267,38 +279,21 @@ body{
 /* group page */
 .group-layout{
     display:grid;
-    grid-template-columns: 200px 1fr 340px;
-    /* grid-template-rows: 1fr; */
-    position:relative;
+    grid-template-columns: max-content 1fr 340px;
+    grid-template-rows: 1fr;
     background: var(--bg);
     height: calc(100vh - var(--nav-height));
 }
-.group-left-pane{
 
-}
-.group-center-pane{
-
-}
-.group-right-pane{
-    border-left: 1px solid var(--border);
-    position: relative;
-    background: var(--bg);
-}
-#leftSideBurger{
-    position: absolute;
-    left: 0;
-    top:0;
+#leftSideBtn{
     border-radius: var(--border-radius-df);
     border: 0;
+    background:none;
+    margin-left: auto;
+    display:block;
 }
-
-.tasks-list{
-    border-radius: var(--border-radius-df);
-    border: var(--border) 1px solid;
-}
-
-.tasks-list{
-    border-bottom: var(--border) 1px solid;
+#leftSideBtn:hover{
+    background-color: #e7e8ea;;
 }
 
 /* notifications */

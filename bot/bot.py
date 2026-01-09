@@ -3,6 +3,7 @@ from aiogram.types import Message
 from aiogram.filters import Command
 from aiogram.enums import ParseMode
 import asyncio
+import requests
 
 from dotenv import load_dotenv
 from os import getenv
@@ -20,17 +21,28 @@ dp = Dispatcher()
 @dp.message(Command('start'))
 async def startCommand(message:Message):
     
-    message_dict = message.model_dump(mode="json")
-    filename = f"message_{message.message_id}.json"
-    try:
-        with open(filename, 'w') as f:
-            json.dump(message_dict, f, ensure_ascii=False, indent=4)
-        await message.answer(f"Message successfully saved to <code>{filename}</code>", parse_mode=ParseMode.HTML)
+    full_text = message.text
+    parts = full_text.split()
+    if len(parts)>1 and parts[1].startswith("connect_"):
+        token = parts[1].replace("connect_","")
+        telegram_id = message.from_user.id
 
-    except IOError as e:
-        await message.answer(f"error: {e}")
-    # id = str(message.from_user.id)
-    # await message.answer(id)
+        res = requests.post(
+            'http://localhost:8000/api/telegram/link',
+            json={
+                "token":token,
+                "telegram_id":telegram_id
+            }
+        )
+
+        await message.answer("Your Telegram has been successfully linked!")
+
+
+@dp.message()
+async def handleMessage(message: Message):
+    await message.answer(f"Ты отправил: {message.text}")
+
+
 
 async def main():
     await dp.start_polling(bot)
