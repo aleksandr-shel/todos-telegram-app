@@ -45,7 +45,7 @@ class TodoSerializer(serializers.ModelSerializer):
     creator = UserPublicSerializer(read_only=True)
     status_display = serializers.CharField(source='get_status_display', read_only=True)
     assignee_obj = UserPublicSerializer(source="assignee",read_only=True,allow_null = True)
-    
+    group = TaskGroupSerializer(required=False, allow_null=True)
     class Meta:
         model = Todo
         fields = [
@@ -70,7 +70,7 @@ class TodoSerializer(serializers.ModelSerializer):
 class TaskGroupDetailsSerializer(serializers.ModelSerializer):
     owner = UserPublicSerializer(read_only=True)
     # members =  UserPublicSerializer(read_only=True, many=True)
-    # memberships = GroupMembershipSerializer(read_only=True, many=True)
+    memberships = GroupMembershipSerializer(read_only=True, many=True)
     tasks = TodoSerializer(read_only=True, many=True)
     class Meta:
         model = TaskGroup

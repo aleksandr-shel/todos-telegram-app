@@ -1,38 +1,13 @@
 import {store} from '../common/store'
 import { apiRequest} from '../common/api'
-import { closeSideMenu, setupSideMenuCloseBtn, renderList, renderTask, autoResize} from '../common/functionality'
+import { closeSideMenu, setupSideMenuCloseBtn, renderList, 
+    renderTask, setupShowHideBtns, setupTextareaAutoResize} from '../common/functionality'
 
 export async function initTodos(){
     const todoListDiv = document.getElementById('todolist')
     const mainBox = document.getElementById('main-box')
 
-    function setupTextareaAutoResize(id){
-        const ta = document.getElementById(id)
-        if (ta){
-            ta.style.maxHeight='500px'
-            ta.addEventListener('input',(e)=>{
-                autoResize.call(e.target)
-            })
-        }
-    }
-
-    function setupShowHideBtns(ids){
-        const btns = ids.map(id => {
-            const btn = document.getElementById(id)
-            return btn
-        })
-        btns.forEach(btn =>{
-            btn.addEventListener('click', (e)=>{
-                btns.forEach(bt=>{
-                    bt.classList.toggle('hidden')
-                })
-                const disappearables = document.querySelectorAll('.disappearable')
-                disappearables.forEach(dis=>{
-                    dis.classList.toggle('hidden')
-                })
-            })
-        })
-    }
+    
     setupShowHideBtns(['btn-show','btn-hide'])
     setupTextareaAutoResize('selectTaskDescription')
     setupTextareaAutoResize('addTaskDescription')
@@ -60,7 +35,7 @@ export async function initTodos(){
         try{
             const data = await apiRequest('todos/', 'POST', todo)
             store.addTask(data)
-            renderTask(data, todoListDiv, mainBox, false)
+            renderTask(data, todoListDiv, mainBox, false, false)
         }catch(err){
             console.error("Ошибка при создании задачи:", err)
         }
