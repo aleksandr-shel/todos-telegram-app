@@ -5,7 +5,7 @@ from .views.todos_view import TodoListCreateView, TodoDetailsView
 from .views.account_view import LoginView, RegisterView, LogoutView, GetUserView
 from .views.groups_view import GroupDetailsView, GroupListCreateView, GroupTasksView
 from .views.memberships_view import GroupMembershipDetailsView, GroupMembershipListCreateView
-from .views.telegram_view import connect_telegram
+from .views.telegram_view import connect_telegram, test
 
 urlpatterns = [
     path("api/todos/", TodoListCreateView.as_view()),
@@ -20,6 +20,7 @@ urlpatterns = [
     path("api/account/getuser", GetUserView.as_view()),
     path("api/account/logout", LogoutView.as_view()),
     path("api/telegram/link", connect_telegram),
+    path("api/telegram/test", test),
     path("login", TemplateView.as_view(template_name='login.html'), name='login-page'),
     path("register", TemplateView.as_view(template_name='register.html'), name='register-page'),
     path("groups/create", create_group_page),

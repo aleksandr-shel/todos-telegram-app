@@ -36,7 +36,7 @@ async def startCommand(message:Message):
         )
         data = res.json()
 
-        await message.answer(data['details'])
+        await message.answer(data['detail'])
 
 
 @dp.message()

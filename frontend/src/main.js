@@ -1,4 +1,5 @@
 import {initAccount} from '../src/pages/account'
+import { initRealTime } from './common/realTime';
 import { initTelegramStuff } from './common/telegramStuff';
 import { initGroup } from './pages/group';
 import { initGroupCreate } from './pages/group-create';
@@ -8,6 +9,7 @@ import { initTodos } from './pages/todos';
 document.addEventListener('DOMContentLoaded', async()=>{
     initAccount()
     initTelegramStuff()
+    initRealTime()
     const page = document.body.dataset.page;
     
     

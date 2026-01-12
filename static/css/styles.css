@@ -318,6 +318,7 @@ body{
     position: absolute;
     right: 20px;
     bottom: 20px;
+    z-index: 1001;
 }
 .toast-box{
     background-color: #EAEAEA;
