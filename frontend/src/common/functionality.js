@@ -77,7 +77,13 @@ function renderTask(task, listDiv, mainBox, inGroup=false, end = true){
     } else {
         if (task.group !== null){
             const spanGroup = document.createElement('span')
-            spanGroup.textContent = `Группа: ${task.group.name}`
+            spanGroup.textContent = `Группа: `
+
+            const link = document.createElement('a')
+            link.href=`/groups/${task.group.id}`
+            link.textContent=`${task.group.name}`
+            spanGroup.append(link)
+
             viewDiv.append(spanGroup)
         }
     }

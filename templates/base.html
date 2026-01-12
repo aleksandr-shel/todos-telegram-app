@@ -33,9 +33,15 @@
                         <li class="nav-item">
                             <div class="nav-link" aria-current="page">username: {{user.get_username}}</div>
                         </li>
+                        {% if user.telegram_id %}
+                        <li id="telegramBtn" class="nav-item">
+                            <button id='telegramDisconnectBtn' class="nav-link" aria-current="page">Разорвать связь с телеграм</button>
+                        </li>
+                        {% else %}
                         <li id="telegramBtn" class="nav-item">
                             <button id='telegramConnectBtn' class="nav-link" aria-current="page">Подключить телеграм</button>
                         </li>
+                        {% endif %}
                         <li id="logoutBtn" class="nav-item">
                             <button class="nav-link" aria-current="page">Выйти</button>
                         </li>

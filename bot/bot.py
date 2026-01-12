@@ -24,18 +24,19 @@ async def startCommand(message:Message):
     full_text = message.text
     parts = full_text.split()
     if len(parts)>1 and parts[1].startswith("connect_"):
-        token = parts[1].replace("connect_","")
+        user_id = parts[1].replace("connect_","")
         telegram_id = message.from_user.id
 
         res = requests.post(
             'http://localhost:8000/api/telegram/link',
             json={
-                "token":token,
+                "user_id":user_id,
                 "telegram_id":telegram_id
             }
         )
+        data = res.json()
 
-        await message.answer("Your Telegram has been successfully linked!")
+        await message.answer(data['details'])
 
 
 @dp.message()

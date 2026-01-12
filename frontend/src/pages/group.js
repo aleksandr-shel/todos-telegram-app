@@ -1,6 +1,6 @@
 import {store} from '../common/store'
 import {apiRequest} from '../common/api'
-import { setupSideMenuCloseBtn, renderList, renderTask, closeSideMenu} from '../common/functionality'
+import { setupSideMenuCloseBtn, renderList, renderTask, closeSideMenu, setupShowHideBtns, setupTextareaAutoResize} from '../common/functionality'
 
 
 export async function initGroup(){
@@ -169,6 +169,9 @@ export async function initGroup(){
         }
     }
 
+    setupShowHideBtns(['btn-show','btn-hide'])
+    setupTextareaAutoResize('selectTaskDescription')
+    setupTextareaAutoResize('addTaskDescription')
     setupAddTaskForm('add-task-form')
     setupSideMenuForm('selectedTaskForm')
     setupDeleteTaskBtn('deleteTaskBtn')

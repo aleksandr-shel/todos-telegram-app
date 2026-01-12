@@ -7,11 +7,6 @@ export async function initTodos(){
     const todoListDiv = document.getElementById('todolist')
     const mainBox = document.getElementById('main-box')
 
-    
-    setupShowHideBtns(['btn-show','btn-hide'])
-    setupTextareaAutoResize('selectTaskDescription')
-    setupTextareaAutoResize('addTaskDescription')
-
     async function loadTodos(){
         try{
             const data = await apiRequest('todos/')
@@ -112,6 +107,10 @@ export async function initTodos(){
             })
         }
     }
+    setupShowHideBtns(['btn-show','btn-hide'])
+    setupTextareaAutoResize('selectTaskDescription')
+    setupTextareaAutoResize('addTaskDescription')
+    
     setupAddTaskForm('add-task-form')
     setupSideMenuForm('selectedTaskForm')
     setupSideMenuCloseBtn('sideMenu-closebtn')
