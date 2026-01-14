@@ -248,7 +248,7 @@ body{
     cursor: pointer;
 }
 
-/* groups part */
+/* groups page */
 
 .groups-list{
     list-style: none;
@@ -312,6 +312,12 @@ body{
     max-width: 90vw;
     text-overflow: ellipsis;
     flex: 0 0 auto;
+}
+#groupsBox{
+    max-height: 40%;
+}
+.avatar{
+
 }
 /* notifications */
 .notifications-box{

@@ -1,4 +1,5 @@
 import {initAccount} from '../src/pages/account'
+import { initNotifications } from './common/notifications';
 import { initRealTime } from './common/realTime';
 import { initTelegramStuff } from './common/telegramStuff';
 import { initGroup } from './pages/group';
@@ -7,6 +8,8 @@ import { initGroups } from './pages/groups';
 import { initTodos } from './pages/todos';
 
 document.addEventListener('DOMContentLoaded', async()=>{
+    
+    initNotifications()
     initAccount()
     initTelegramStuff()
     initRealTime()

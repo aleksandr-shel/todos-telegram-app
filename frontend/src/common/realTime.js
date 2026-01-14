@@ -19,7 +19,7 @@ export function initRealTime(){
     }
 
     const testRTBtn = document.getElementById('testRT')
-    testRTBtn.addEventListener('click',(e)=>{
+    testRTBtn?.addEventListener('click',(e)=>{
         sendMessage()
     })
 }

@@ -47,6 +47,10 @@ class GroupMembership(models.Model):
     def __str__(self):
         return f"{self.user} in {self.group} ({self.role})"
 
+class GroupInvites(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='invites')
+    group = models.ForeignKey(TaskGroup, on_delete=models.CASCADE)
+
 class Todo(models.Model):
     
     class Status(models.IntegerChoices):

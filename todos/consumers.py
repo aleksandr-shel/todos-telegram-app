@@ -3,7 +3,6 @@ from channels.generic.websocket import AsyncJsonWebsocketConsumer
 import json
 
 class TodoConsumer(AsyncJsonWebsocketConsumer):
-    group_name = 'todos'
 
     async def connect(self):
         # user = self.scope['user']

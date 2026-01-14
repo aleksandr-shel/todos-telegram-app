@@ -82,6 +82,7 @@ export async function initGroup(){
         leftSideBurger.addEventListener('click',(e)=>{
             const groupBox = document.getElementById('groupsBox')
             groupBox.classList.toggle('hidden')
+            const membersBox = document.getElementById('membersBox')
             const icons = Array.from(leftSideBurger.children)
             icons.forEach(icon =>{
                 icon.classList.toggle('hidden')
