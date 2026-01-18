@@ -14,6 +14,6 @@ export function initNotifications(){
         contentSpan.textContent='toast test'
         toast.append(contentSpan)
 
-        notificationDiv.append(toast)
+        // notificationDiv.append(toast)
     }
 }

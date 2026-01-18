@@ -47,10 +47,37 @@ class GroupMembership(models.Model):
     def __str__(self):
         return f"{self.user} in {self.group} ({self.role})"
 
-class GroupInvites(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='invites')
-    group = models.ForeignKey(TaskGroup, on_delete=models.CASCADE)
 
+class InviteStatus(models.TextChoices):
+        PENDING = 'pending'
+        ACCEPTED = 'accepted'
+        REJECTED = 'rejected'
+        EXPIRED = 'expired'
+
+class GroupInvite(models.Model):
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='group_invites')
+    group = models.ForeignKey(TaskGroup, on_delete=models.CASCADE)
+    created_at = models.DateField(auto_now_add=True)
+    status = models.CharField(
+        max_length=10,
+        choices=InviteStatus.choices,
+        default=InviteStatus.PENDING
+    )
+    class Meta:
+        unique_together=('user','group')
+
+class GroupApplication(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='group_applications')
+    group = models.ForeignKey(TaskGroup, on_delete=models.CASCADE, related_name='applications')
+    created_at = models.DateField(auto_now_add=True)
+    status = models.CharField(
+        max_length=10,
+        choices=InviteStatus.choices,
+        default=InviteStatus.PENDING
+    )
+    class Meta:
+        unique_together=('user','group')
 class Todo(models.Model):
     
     class Status(models.IntegerChoices):

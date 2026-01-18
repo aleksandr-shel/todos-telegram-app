@@ -8,23 +8,33 @@
             <i class="bi bi-list"></i>
             <i class="bi bi-arrow-bar-left hidden"></i>
         </button>
-        <ul class="groups-list hidden" id="groupsBox"></ul>
-        <h4>
-            Пользователи
-        </h4>
-        <input placeholder="Поиск пользователя">
-        <ul id="membersBox">
-            <li>
-                <div class="avatar">
-                    A
-                </div>
-            </li>
-        </ul>
+        <div class="hidden" id="groupsBox">
+            <h4>
+                Группы:
+            </h4>
+            <input placeholder="Поиск групп">
+            <ul class="groups-list" id="groupsList">
+            </ul>
+        </div>
     </aside>
     <section class="pane pane-center">
-        <h3 id="groupName">
-            GROUP NAME
-        </h3>
+        <div class="group-details mb-1">
+            <h3 id="groupName">
+                Название группы
+            </h3>
+            <div>
+                <button class="btn btn-info" id="memberBtn">
+                    Участники: <span id="memberNumber"></span>
+                </button>
+                
+                <button class="btn btn-secondary">
+                    Изменить название
+                </button>
+                <button class="btn btn-danger">
+                    Удалить группу
+                </button>
+            </div>
+        </div>
         <form id="add-task-form" class="d-flex flex-column gap-2">
             <div>
                 <input required="" type="text" name="title" class="form-control" maxlength="255" placeholder="Добавить задачу">
@@ -50,40 +60,66 @@
     </section>
     <aside id="sideMenu" class="pane pane-right hidden">
         <button id="sideMenu-closebtn" class="close-btn"></button>
-        <form id="selectedTaskForm" class="d-flex flex-column gap-1">
+        <div class="right-form-wrapper hidden" id="selectedTaskForm-wrapper">
+            <form id="selectedTaskForm" class="d-flex flex-column gap-1">
+                <div>
+                    <label for="selectTaskTitle">
+                        Название
+                    </label>
+                    <input class="form-control" id="selectTaskTitle" name="title" placeholder="Название задачи">
+                </div>
+                <div>
+                    <textarea id="selectTaskDescription" name="description" placeholder="Добавить примечание" class="form-control"></textarea>
+                </div>
+                <div>
+                    <label for="selectTaskDueDate">
+                        Срок выполнения
+                    </label>
+                    <input class="form-control" type="date" id="selectTaskDueDate" name="due_date">
+                </div>
+                <div>
+                    <select name="status" class="form-select">
+                        <option value="1">К выполнению</option>
+                        <option value="2">В процессе</option>
+                        <option value="3">Выволнено</option>
+                    </select>
+                </div>
+                <div>
+                    <button class="btn btn-dark w-100" type="submit">
+                        Сохранить
+                    </button>
+                </div>
+            </form>
+
             <div>
-                <label for="selectTaskTitle">
-                    Название
-                </label>
-                <input class="form-control" id="selectTaskTitle" name="title" placeholder="Название задачи">
-            </div>
-            <div>
-                <textarea id="selectTaskDescription" name="description" placeholder="Добавить примечание" class="form-control"></textarea>
-            </div>
-            <div>
-                <label for="selectTaskDueDate">
-                    Срок выполнения
-                </label>
-                <input class="form-control" type="date" id="selectTaskDueDate" name="due_date">
-            </div>
-            <div>
-                <select name="status" class="form-select">
-                    <option value="1">К выполнению</option>
-                    <option value="2">В процессе</option>
-                    <option value="3">Выволнено</option>
-                </select>
-            </div>
-            <div>
-                <button class="btn btn-dark w-100" type="submit">
-                    Сохранить
+                <button class="btn btn-secondary w-100" id="deleteTaskBtn">
+                    Удалить
                 </button>
             </div>
-        </form>
-
-        <div>
-            <button class="btn btn-secondary w-100" id="deleteTaskBtn">
-                Удалить
-            </button>
+        </div>
+        <div class="hidden" id="membersBox">
+            <h4>
+                Пользователи: 
+            </h4>
+            <input placeholder="Поиск пользователя">
+            <ul id="membersList">
+                <li class="d-flex">
+                    <div class="avatar">
+                        A
+                    </div>
+                    <div>
+                        alex
+                    </div>
+                </li>
+                <li class="d-flex">
+                    <div class="avatar">
+                        B
+                    </div>
+                    <div>
+                        Boris
+                    </div>
+                </li>
+            </ul>
         </div>
     </aside>
 </main>

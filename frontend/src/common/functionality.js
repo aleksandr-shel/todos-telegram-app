@@ -4,8 +4,8 @@ const sideMenu =  document.getElementById('sideMenu')
 const selectedTaskForm =  document.getElementById('selectedTaskForm')
 
 function closeSideMenu(){
-    document.querySelectorAll('.task-selected').forEach(el =>{
-        el.classList.remove('task-selected')
+    document.querySelectorAll('.right-sidemenu-show').forEach(el =>{
+        el.classList.remove('right-sidemenu-show')
     })
     sideMenu.classList.add('hidden')
 }
@@ -45,6 +45,18 @@ function setupShowHideBtns(ids){
         })
     })
 }
+
+function handleTodoClickDefault(task, itemDiv, mainBox){
+    store.setSelectedTask(task)
+    document.querySelectorAll('.right-sidemenu-show').forEach(el =>{
+        el.classList.remove('right-sidemenu-show')
+    })
+    itemDiv.classList.add('right-sidemenu-show')
+    sideMenu.classList.remove('hidden')
+    mainBox.classList.add('right-sidemenu-show')
+    fillSelectedTaskForm()
+}
+
 function renderTask(task, listDiv, mainBox, inGroup=false, end = true){
     const itemDiv = document.createElement('div')
     const viewDiv = document.createElement('div')
@@ -95,14 +107,7 @@ function renderTask(task, listDiv, mainBox, inGroup=false, end = true){
 
     itemDiv.append(viewDiv)
     itemDiv.addEventListener('click',(e)=>{
-        store.setSelectedTask(task)
-        document.querySelectorAll('.task-selected').forEach(el =>{
-            el.classList.remove('task-selected')
-        })
-        itemDiv.classList.add('task-selected')
-        sideMenu.classList.remove('hidden')
-        mainBox.classList.add('task-selected')
-        fillSelectedTaskForm()
+        handleTodoClickDefault(task, itemDiv, mainBox)
     })
 
     //добавлять в конце или начале листа

@@ -6,10 +6,11 @@ import { setupSideMenuCloseBtn, renderList, renderTask, closeSideMenu, setupShow
 export async function initGroup(){
     const todoListDiv = document.getElementById('taskslist')
     const mainBox = document.getElementById('group-box')
-    const groupListBox = document.getElementById('groupsBox')
+    const groupListBox = document.getElementById('groupsList')
 
     function renderGroup(group){
         document.getElementById('groupName').textContent = `Группа: ${group.name}`
+        document.getElementById('memberNumber').textContent = `${group.memberships.length}`
         store.setTasks(group.tasks)
         renderList(store.tasks, todoListDiv, mainBox, true)
     }
@@ -82,7 +83,6 @@ export async function initGroup(){
         leftSideBurger.addEventListener('click',(e)=>{
             const groupBox = document.getElementById('groupsBox')
             groupBox.classList.toggle('hidden')
-            const membersBox = document.getElementById('membersBox')
             const icons = Array.from(leftSideBurger.children)
             icons.forEach(icon =>{
                 icon.classList.toggle('hidden')
@@ -170,12 +170,21 @@ export async function initGroup(){
         }
     }
 
+    function setupShowMembersButton(id){
+        const membersBtn = document.getElementById(id)
+        if (membersBtn){
+            membersBtn.addEventListener('click',(e)=>{
+                console.log('cl')
+            })
+        }
+    }   
+
     setupShowHideBtns(['btn-show','btn-hide'])
     setupTextareaAutoResize('selectTaskDescription')
     setupTextareaAutoResize('addTaskDescription')
     setupAddTaskForm('add-task-form')
     setupSideMenuForm('selectedTaskForm')
     setupDeleteTaskBtn('deleteTaskBtn')
-
+    setupShowMembersButton('memberBtn')
     await loadOneGroup(getGroupIdFromPath())
 }
