@@ -93,8 +93,6 @@ export async function initTodos(){
             })
         }
     }
-
-
     function setupDeleteTaskBtn(id){
         const deleteTaskBtn = document.getElementById(id)
         if (deleteTaskBtn){

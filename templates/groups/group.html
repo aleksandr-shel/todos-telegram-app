@@ -4,24 +4,26 @@
 {% block content %}
 <main id='group-box' class="group-layout">
     <aside class="pane pane-left">
-        <button id="leftSideBtn">
-            <i class="bi bi-list"></i>
-            <i class="bi bi-arrow-bar-left hidden"></i>
-        </button>
         <div class="hidden" id="groupsBox">
             <h4>
                 Группы:
             </h4>
-            <input placeholder="Поиск групп">
+            <input placeholder="Поиск групп" class="form-control">
             <ul class="groups-list" id="groupsList">
             </ul>
         </div>
     </aside>
     <section class="pane pane-center">
         <div class="group-details mb-1">
-            <h3 id="groupName">
-                Название группы
-            </h3>
+            <div class="d-flex flex-row align-items-center">
+                <button id="leftSideBtn">
+                    <i class="bi bi-list"></i>
+                    <i class="bi bi-arrow-bar-left hidden"></i>
+                </button>
+                <h3 id="groupName">
+                    Название группы
+                </h3>
+            </div>
             <div>
                 <button class="btn btn-info" id="memberBtn">
                     Участники: <span id="memberNumber"></span>
@@ -60,7 +62,7 @@
     </section>
     <aside id="sideMenu" class="pane pane-right hidden">
         <button id="sideMenu-closebtn" class="close-btn"></button>
-        <div class="right-form-wrapper hidden" id="selectedTaskForm-wrapper">
+        <div class="right-form-wrapper hidden" id="selectedTaskFormWrapper">
             <form id="selectedTaskForm" class="d-flex flex-column gap-1">
                 <div>
                     <label for="selectTaskTitle">
@@ -99,9 +101,9 @@
         </div>
         <div class="hidden" id="membersBox">
             <h4>
-                Пользователи: 
+                Участники группы: 
             </h4>
-            <input placeholder="Поиск пользователя">
+            <input placeholder="Поиск пользователя" class="form-control">
             <ul id="membersList">
                 <li class="d-flex">
                     <div class="avatar">

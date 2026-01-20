@@ -8,6 +8,15 @@ function closeSideMenu(){
         el.classList.remove('right-sidemenu-show')
     })
     sideMenu.classList.add('hidden')
+    
+    const page = document.body.dataset.page
+
+    switch(page){
+        case "group":
+            document.getElementById('selectedTaskFormWrapper').classList.add('hidden')
+            document.getElementById('membersBox').classList.add('hidden')
+            break;
+    }
 }
 
 function setupSideMenuCloseBtn(id){
@@ -45,8 +54,15 @@ function setupShowHideBtns(ids){
         })
     })
 }
+function stringToColor(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return `hsl(${hash % 360}, 70%, 50%)`;
+}
 
-function handleTodoClickDefault(task, itemDiv, mainBox){
+function handleTodoBoxClick(task, itemDiv, mainBox){
     store.setSelectedTask(task)
     document.querySelectorAll('.right-sidemenu-show').forEach(el =>{
         el.classList.remove('right-sidemenu-show')
@@ -55,6 +71,15 @@ function handleTodoClickDefault(task, itemDiv, mainBox){
     sideMenu.classList.remove('hidden')
     mainBox.classList.add('right-sidemenu-show')
     fillSelectedTaskForm()
+
+    const page = document.body.dataset.page;
+    switch (page){
+        case "group":
+            document.getElementById('selectedTaskFormWrapper').classList.remove('hidden')
+            document.getElementById('membersBox').classList.add('hidden')
+
+            break;
+    }
 }
 
 function renderTask(task, listDiv, mainBox, inGroup=false, end = true){
@@ -107,7 +132,7 @@ function renderTask(task, listDiv, mainBox, inGroup=false, end = true){
 
     itemDiv.append(viewDiv)
     itemDiv.addEventListener('click',(e)=>{
-        handleTodoClickDefault(task, itemDiv, mainBox)
+        handleTodoBoxClick(task, itemDiv, mainBox)
     })
 
     //добавлять в конце или начале листа
@@ -154,11 +179,11 @@ function fillSelectedTaskForm(){
 function renderList(list, container, mainBox, inGroup=false){
     container.innerHTML = ""
     for (const item of list){
-        renderTask(item, container, mainBox, inGroup)
+        renderTask(item, container, mainBox, inGroup, true)
     }
 }
 
 
 export {sideMenu, closeSideMenu, setupSideMenuCloseBtn, renderList, renderTask, autoResize,
-    setupTextareaAutoResize, setupShowHideBtns
+    setupTextareaAutoResize, setupShowHideBtns, fillSelectedTaskForm, stringToColor
 }

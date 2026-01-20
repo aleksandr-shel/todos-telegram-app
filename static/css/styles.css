@@ -116,6 +116,9 @@ body{
     min-height: 0;
     max-width: 200px;
 }
+.pane-left:not(:has(> :not(.hidden))){
+    padding-left: 0;
+}
 .nav-list{
     list-style: none;
     padding: 0;
@@ -301,7 +304,7 @@ body{
     border-radius: var(--border-radius-df);
     border: 0;
     background:none;
-    margin-left: auto;
+    /* margin-right: auto; */
     display:block;
 }
 #leftSideBtn:hover{

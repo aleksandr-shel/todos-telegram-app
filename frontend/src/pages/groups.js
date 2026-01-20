@@ -34,8 +34,20 @@ export async function initGroups(){
             groupListBox.append(box)
         })
     }
+    async function searchGroups(q){
+        
+    }
+    
+    function setupGroupSearchInput(id){
+        const groupSearchInput = document.getElementById(id)
+        groupSearchInput.addEventListener('input',(e)=>{
+            
+        })
+    }
+
     
 
+    setupGroupSearchInput('groupSearchForm')
     async function loadUserGroups(){
         try{
             const data = await apiRequest('groups')
@@ -46,6 +58,5 @@ export async function initGroups(){
             console.log(err)
         }
     }
-
     await loadUserGroups()
 }

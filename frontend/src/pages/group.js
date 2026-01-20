@@ -1,19 +1,30 @@
 import {store} from '../common/store'
 import {apiRequest} from '../common/api'
-import { setupSideMenuCloseBtn, renderList, renderTask, closeSideMenu, setupShowHideBtns, setupTextareaAutoResize} from '../common/functionality'
+import {sideMenu, setupSideMenuCloseBtn, renderList, renderTask, closeSideMenu, setupShowHideBtns, setupTextareaAutoResize} from '../common/functionality'
 
 
 export async function initGroup(){
     const todoListDiv = document.getElementById('taskslist')
     const mainBox = document.getElementById('group-box')
     const groupListBox = document.getElementById('groupsList')
-
+    
+    
     function renderGroup(group){
         document.getElementById('groupName').textContent = `Группа: ${group.name}`
         document.getElementById('memberNumber').textContent = `${group.memberships.length}`
+        
         store.setTasks(group.tasks)
         renderList(store.tasks, todoListDiv, mainBox, true)
     }
+
+    function renderMembersList(members){
+        const membersList = document.getElementById('membersList')
+        
+        if (Array.isArray(members)){
+            const listItem = document.createElement('li')
+        }
+    }
+
     function renderGroups(groups){
         groups.forEach(group=>{
             const box = document.createElement('li')
@@ -133,7 +144,6 @@ export async function initGroup(){
                     data.due_date=null
                 }
                 data.group_id = store.selectedGroup.id
-                console.log('creating todo:\n',data)
                 postTodo(data)
                 e.target.reset()
             })
@@ -174,7 +184,14 @@ export async function initGroup(){
         const membersBtn = document.getElementById(id)
         if (membersBtn){
             membersBtn.addEventListener('click',(e)=>{
-                console.log('cl')
+                document.querySelectorAll('.right-sidemenu-show').forEach(el =>{
+                    el.classList.remove('right-sidemenu-show')
+                })
+                sideMenu.classList.remove('hidden')
+                mainBox.classList.add('right-sidemenu-show')
+
+                document.getElementById('selectedTaskFormWrapper').classList.add('hidden')
+                document.getElementById('membersBox').classList.remove('hidden')
             })
         }
     }   
