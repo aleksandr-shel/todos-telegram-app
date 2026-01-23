@@ -15,13 +15,34 @@ export async function initGroup(){
         
         store.setTasks(group.tasks)
         renderList(store.tasks, todoListDiv, mainBox, true)
+        renderMembersList(group.memberships)
     }
 
-    function renderMembersList(members){
+    function renderMembersList(memberships){
         const membersList = document.getElementById('membersList')
-        
-        if (Array.isArray(members)){
-            const listItem = document.createElement('li')
+        console.log(memberships)
+        if (Array.isArray(memberships)){
+            const str = `<li class="d-flex">
+                    <div class="avatar">
+                        A
+                    </div>
+                    <div>
+                        alex
+                    </div>
+                </li>`
+            memberships.forEach(membership=>{
+                const listItem = document.createElement('li')
+                listItem.classList.add('d-flex')
+                const username= membership?.user?.username
+                const avatar = document.createElement('div')
+                avatar.classList.add('avatar')
+                avatar.textContent = `${username[0].toUpperCase()}`
+                const usernameDiv = document.createElement('div')
+                usernameDiv.textContent = `${username}`
+                listItem.append(avatar)
+                listItem.append(usernameDiv)
+                membersList.append(listItem)
+            })
         }
     }
 
@@ -98,7 +119,6 @@ export async function initGroup(){
             for (const k in params){
                 queryStr+=`${k}=${params[k]}`
             }
-            console.log(params)
             const groups = await apiRequest('groups/?'+queryStr)
             store.setSearchGroups(groups)
             renderGroups(store.searchGroups)
