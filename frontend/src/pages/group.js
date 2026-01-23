@@ -26,6 +26,7 @@ export async function initGroup(){
     }
 
     function renderGroups(groups){
+        groupListBox.innerHTML=''
         groups.forEach(group=>{
             const box = document.createElement('li')
             box.classList.add('groups-item')
@@ -82,6 +83,56 @@ export async function initGroup(){
             console.log(err)
         }
     }
+
+    async function deleteGroup(id){
+        try{
+            await apiRequest('groups/'+id)
+        }catch(error){
+            console.log(error)
+        }
+    }
+
+    async function searchGroups(params){
+        try{
+            let queryStr=''
+            for (const k in params){
+                queryStr+=`${k}=${params[k]}`
+            }
+            console.log(params)
+            const groups = await apiRequest('groups/?'+queryStr)
+            store.setSearchGroups(groups)
+            renderGroups(store.searchGroups)
+        }catch(error){
+            console.log(error)
+        }
+    }
+    
+    function setupGroupSearchInput(id){
+        const groupSearchForm = document.getElementById(id)
+        
+        if (groupSearchForm){
+            const inputs = groupSearchForm.querySelectorAll('input, select, textarea')
+            function isFormEmpty(){
+                for (const input of inputs){
+                    if (input.value.trim() !== ''){
+                        return false
+                    }
+                }
+                return true
+            }
+            groupSearchForm.addEventListener('submit',(e)=>{
+                e.preventDefault()
+
+                const formData = new FormData(e.target)
+                const params = Object.fromEntries(formData.entries())
+                searchGroups(params)
+
+                e.target.reset()
+            })
+        }
+    }
+    setupGroupSearchInput('groupSearchForm')
+
     function getGroupIdFromPath(){
         const parts = window.location.pathname.split('/').filter(Boolean)
         if (parts[0] !== 'groups' || !parts[1]) return null

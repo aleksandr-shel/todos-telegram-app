@@ -5,6 +5,7 @@ export const store={
     selectedTask:null,
     tasks:[],
     groups:[],
+    searchGroups:[],
     selectedGroup:null,
     setUser: function(user){
         this.user = user
@@ -35,6 +36,9 @@ export const store={
     },
     deleteGroup:function(id){
         this.groups = this.groups.filter(group => group.id !== id)
+    },
+    setSearchGroups:function(groups){
+        this.searchGroups=groups
     }
 
 }

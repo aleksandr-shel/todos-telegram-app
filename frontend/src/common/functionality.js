@@ -31,7 +31,7 @@ function setupTextareaAutoResize(id){
     const ta = document.getElementById(id)
     if (ta){
         ta.style.maxHeight='500px'
-        ta.addEventListener('input',(e)=>{
+        ta.addEventListener("input",(e)=>{
             autoResize.call(e.target)
         })
     }
@@ -67,11 +67,6 @@ function handleTodoBoxClick(task, itemDiv, mainBox){
     document.querySelectorAll('.right-sidemenu-show').forEach(el =>{
         el.classList.remove('right-sidemenu-show')
     })
-    itemDiv.classList.add('right-sidemenu-show')
-    sideMenu.classList.remove('hidden')
-    mainBox.classList.add('right-sidemenu-show')
-    fillSelectedTaskForm()
-
     const page = document.body.dataset.page;
     switch (page){
         case "group":
@@ -80,6 +75,11 @@ function handleTodoBoxClick(task, itemDiv, mainBox){
 
             break;
     }
+    itemDiv.classList.add('right-sidemenu-show')
+    sideMenu.classList.remove('hidden')
+    mainBox.classList.add('right-sidemenu-show')
+    fillSelectedTaskForm()
+
 }
 
 function renderTask(task, listDiv, mainBox, inGroup=false, end = true){

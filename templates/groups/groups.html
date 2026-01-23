@@ -4,8 +4,13 @@
 {% block content %}
     <div>
         <div class="d-flex justify-content-between m-3">
-            <form id="groupSearchForm">
-                <input placeholder="Поиск группы" class="form-control">
+            <form id="groupSearchForm" class="d-flex flex-row">
+                <div>
+                    <input type='search' placeholder="Поиск группы" name="q" class="form-control">
+                </div>
+                <button type='submit' class="btn btn-primary ms-1">
+                    Поиск
+                </button>
             </form>
             <a href="/groups/create">
                 Создать группу

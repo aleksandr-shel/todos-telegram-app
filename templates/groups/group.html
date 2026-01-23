@@ -8,7 +8,12 @@
             <h4>
                 Группы:
             </h4>
-            <input placeholder="Поиск групп" class="form-control">
+            <form id='groupSearchForm' class="d-flex flex-column">
+                <input type="search" placeholder="Поиск групп" name="q" class="form-control">
+                <button type='submit' class="btn btn-primary">
+                    Поиск
+                </button>
+            </form>
             <ul class="groups-list" id="groupsList">
             </ul>
         </div>

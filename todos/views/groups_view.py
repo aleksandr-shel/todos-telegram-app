@@ -9,13 +9,23 @@ from django.db.models import Q
 class GroupListCreateView(APIView):
     
     def get(self, request):
-        groups = TaskGroup.objects.filter(
-            Q(owner = request.user) | Q(members = request.user)
-        ).distinct()
-        
-        serializer = TaskGroupSerializer(groups, many=True, context={"request":request})
-        
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        q = request.query_params.get('q','')
+
+        if q:
+            groups = TaskGroup.objects.filter(
+                name__icontains=q
+            )
+            serializer = TaskGroupSerializer(groups, many=True, context={"request":request})
+            return Response(serializer.data, status=status.HTTP_200_OK)
+            
+        else:
+            groups = TaskGroup.objects.filter(
+                Q(owner = request.user) | Q(members = request.user)
+            ).distinct()
+            
+            serializer = TaskGroupSerializer(groups, many=True, context={"request":request})
+            
+            return Response(serializer.data, status=status.HTTP_200_OK)
     
     def post(self, request):
         serializer = TaskGroupSerializer(data=request.data, context={"request":request})

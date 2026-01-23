@@ -5,6 +5,7 @@ export async function initGroups(){
 
     const groupListBox = document.getElementById('groupListBox')
     function renderGroups(groups){
+        groupListBox.innerHTML=''
         groups.forEach(group=>{
             const box = document.createElement('li')
             box.classList.add('groups-item')
@@ -34,20 +35,49 @@ export async function initGroups(){
             groupListBox.append(box)
         })
     }
-    async function searchGroups(q){
-        
+    async function searchGroups(params){
+        try{
+            let queryStr=''
+            for (const k in params){
+                queryStr+=`${k}=${params[k]}`
+            }
+
+            const groups = await apiRequest('groups/?'+queryStr)
+            store.setSearchGroups(groups)
+            renderGroups(store.searchGroups)
+        }catch(error){
+            console.log(error)
+        }
     }
     
     function setupGroupSearchInput(id){
-        const groupSearchInput = document.getElementById(id)
-        groupSearchInput.addEventListener('input',(e)=>{
-            
-        })
+        const groupSearchForm = document.getElementById(id)
+        const inputs = groupSearchForm.querySelectorAll('input, select, textarea')
+        function isFormEmpty(){
+            for (const input of inputs){
+                if (input.value.trim() !== ''){
+                    return false
+                }
+            }
+            return true
+        }
+        if (groupSearchForm){
+            groupSearchForm.addEventListener('submit',(e)=>{
+                e.preventDefault()
+
+                const formData = new FormData(e.target)
+                const params = Object.fromEntries(formData.entries())
+                searchGroups(params)
+
+                e.target.reset()
+            })
+
+        }
+
     }
 
-    
-
     setupGroupSearchInput('groupSearchForm')
+
     async function loadUserGroups(){
         try{
             const data = await apiRequest('groups')
