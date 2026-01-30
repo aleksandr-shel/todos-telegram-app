@@ -15,14 +15,25 @@ class UsersView(APIView):
     pagination_class = UserPagination
     # search users
     def get(self, request):
-        q=request.query_params.get('q','')
+        # later do search for members then for users
         
-        queryset = (
-            User.objects.filter(username__icontains=q)
-            .order_by('id')
-            .values('id', 'username', 'telegram_id')
-        )
+        q=request.query_params.get('q','')
+        group_id = request.query_params.get('group_id', '')
+        print('group_id', group_id)
+        if q:
+            queryset = (
+                User.objects.filter(username__icontains=q)
+                .order_by('id')
+                .values('id', 'username', 'telegram_id')
+            )
+        else:
+            queryset = (
+                User.objects.filter(username__icontains=q)
+                .order_by('id')
+                .values('id', 'username', 'telegram_id')
+            )
 
+        
         paginator = self.pagination_class()
         page = paginator.paginate_queryset(queryset, request)
 

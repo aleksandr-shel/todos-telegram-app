@@ -18,29 +18,24 @@ export async function initGroup(){
         renderMembersList(group.memberships)
     }
 
-    function renderMembersList(memberships){
+    function renderMembersList(users){
         const membersList = document.getElementById('membersList')
-        console.log(memberships)
-        if (Array.isArray(memberships)){
-            const str = `<li class="d-flex">
-                    <div class="avatar">
-                        A
-                    </div>
-                    <div>
-                        alex
-                    </div>
-                </li>`
-            memberships.forEach(membership=>{
+        membersList.innerHTML=''
+        if (Array.isArray(users)){
+            users.forEach(item=>{
                 const listItem = document.createElement('li')
-                listItem.classList.add('d-flex')
-                const username= membership?.user?.username
+                const username= item?.user != null ?  item?.user?.username : item?.username
                 const avatar = document.createElement('div')
                 avatar.classList.add('avatar')
                 avatar.textContent = `${username[0].toUpperCase()}`
-                const usernameDiv = document.createElement('div')
-                usernameDiv.textContent = `${username}`
+                const userDetails = document.createElement('div')
+                userDetails.classList.add('member-details')
+                const usernameSpan = document.createElement('span')
+                usernameSpan.textContent = `${username}`
+                userDetails.append(usernameSpan)
+
                 listItem.append(avatar)
-                listItem.append(usernameDiv)
+                listItem.append(userDetails)
                 membersList.append(listItem)
             })
         }
@@ -131,21 +126,21 @@ export async function initGroup(){
         const groupSearchForm = document.getElementById(id)
         
         if (groupSearchForm){
-            const inputs = groupSearchForm.querySelectorAll('input, select, textarea')
-            function isFormEmpty(){
-                for (const input of inputs){
-                    if (input.value.trim() !== ''){
-                        return false
-                    }
-                }
-                return true
-            }
-            groupSearchForm.addEventListener('submit',(e)=>{
+            // const inputs = groupSearchForm.querySelectorAll('input, select, textarea')
+            // function isFormEmpty(){
+            //     for (const input of inputs){
+            //         if (input.value.trim() !== ''){
+            //             return false
+            //         }
+            //     }
+            //     return true
+            // }
+            groupSearchForm.addEventListener('submit', async(e)=>{
                 e.preventDefault()
 
                 const formData = new FormData(e.target)
                 const params = Object.fromEntries(formData.entries())
-                searchGroups(params)
+                await searchGroups(params)
 
                 e.target.reset()
             })
@@ -250,6 +245,47 @@ export async function initGroup(){
             })
         }
     }
+
+    async function searchUsers(params){
+        try{
+            let queryStr=''
+            for (const k in params){
+                queryStr+=`${k}=${params[k]}`
+            }
+            
+            const response = await apiRequest(`users?${queryStr}`)
+            renderMembersList(response.results)
+        }catch(err){
+            console.log(err)
+        }
+    }
+    function isFormEmpty(inputs){
+        for (const input of inputs){
+            if (input.value.trim() !== ''){
+                return false
+            }
+        }
+        return true
+    }
+    function setupUsersSearchForm(id){
+        const usersSearchForm = document.getElementById(id)
+        if (usersSearchForm){
+            usersSearchForm.addEventListener('submit', async(e)=>{
+                e.preventDefault()
+                const formData = new FormData(e.target)
+                const params = Object.fromEntries(formData.entries())
+                await searchUsers(params)
+            })
+            const inputs = usersSearchForm.querySelectorAll('input, select, textarea')
+            usersSearchForm.addEventListener('input',(e)=>{
+                if (isFormEmpty(inputs)){
+                    renderMembersList(store?.selectedGroup?.memberships)
+                }
+            })
+        }
+    }
+
+    setupUsersSearchForm('usersSearchForm')
 
     function setupShowMembersButton(id){
         const membersBtn = document.getElementById(id)
