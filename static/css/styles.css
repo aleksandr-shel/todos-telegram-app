@@ -313,8 +313,11 @@ body{
 #groupName{
     overflow: hidden;
     max-width: 90vw;
+    width: auto;
     text-overflow: ellipsis;
     flex: 0 0 auto;
+    overflow-wrap: break-word;
+    word-break: break-word;   
 }
 #groupsBox{
     overflow-y: auto;
