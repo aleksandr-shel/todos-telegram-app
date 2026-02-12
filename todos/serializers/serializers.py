@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Todo, User, TaskGroup, GroupMembership
+from ..models import Todo, User, TaskGroup, GroupMembership
 from django.contrib.auth import authenticate
 from django.utils import timezone
 
@@ -24,12 +24,14 @@ class GroupMembershipSerializer(serializers.ModelSerializer):
 
 class TaskGroupSerializer(serializers.ModelSerializer):
     owner = UserPublicSerializer(read_only=True)
+    is_owner = serializers.SerializerMethodField()
+    
     class Meta:
         model = TaskGroup
         fields = [
-            "id", "name", "owner", "created_at"
+            "id", "name", "owner", "created_at","is_owner"
         ]
-        read_only_fields = ["id", "owner", "created_at"]
+        read_only_fields = ["id", "owner", "created_at","is_owner"]
 
     def create(self, validated_data):
         request = self.context['request']
@@ -39,6 +41,11 @@ class TaskGroupSerializer(serializers.ModelSerializer):
         )
         return group
     
+    def get_is_owner(self, obj):
+        request = self.context.get("request")
+        if not request or not request.user or request.user.is_anonymous:
+            return False
+        return obj.owner.id == request.user.id
     
 class TodoSerializer(serializers.ModelSerializer):
     title = serializers.CharField(required=True, allow_blank=False)
@@ -78,6 +85,8 @@ class TaskGroupDetailsSerializer(serializers.ModelSerializer):
             "id", "name", "owner", "memberships", 'tasks'
         ]
         read_only_fields = ["id", "owner"]
+    
+    
         
 class RegisterSerializer(serializers.ModelSerializer):
     

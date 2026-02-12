@@ -10,6 +10,7 @@ export async function initGroup(){
     
     
     function renderGroup(group){
+        console.log(group)
         document.getElementById('groupName').textContent = `Группа: ${group.name}`
         document.getElementById('memberNumber').textContent = `${group.memberships.length}`
         

@@ -33,13 +33,14 @@
                 <button class="btn btn-info" id="memberBtn">
                     Участники: <span id="memberNumber"></span>
                 </button>
-                
-                <button class="btn btn-secondary">
-                    Изменить название
-                </button>
-                <button class="btn btn-danger">
-                    Удалить группу
-                </button>
+                {% if is_owner %}
+                    <button class="btn btn-secondary">
+                        Изменить название
+                    </button>
+                    <button class="btn btn-danger">
+                        Удалить группу
+                    </button>
+                {% endif %}
             </div>
         </div>
         <form id="add-task-form" class="d-flex flex-column gap-2">

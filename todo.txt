@@ -1,5 +1,2 @@
-search for people in app
-search for groups in app
-create group invites 
-and add api endpoints 
+create group invites and user applications
 add member/remove member/ leave group

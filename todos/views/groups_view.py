@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from ..models import TaskGroup, GroupMembership, Todo
-from ..serializers import TaskGroupSerializer, TaskGroupDetailsSerializer, TodoSerializer
+from ..serializers.serializers import TaskGroupSerializer, TaskGroupDetailsSerializer, TodoSerializer
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
 

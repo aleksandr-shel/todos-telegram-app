@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from rest_framework.exceptions import PermissionDenied
-from ..models import GroupMembership
+from ..models import TaskGroup
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 def index(request):
@@ -17,7 +18,12 @@ def groups_page(request):
 
 @login_required(login_url="login-page")
 def group_page(request, pk):
-    return render(request, "groups/group.html")
+    
+    group = get_object_or_404(TaskGroup, pk = pk)
+    
+    is_owner = group.owner_id == request.user.id
+    print(is_owner)
+    return render(request, "groups/group.html", {'is_owner':is_owner})
 
 @login_required(login_url="login-page")
 def create_group_page(request):

@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import PermissionDenied
 from ..models import Todo, TaskGroup
-from ..serializers import TodoSerializer
+from ..serializers.serializers import TodoSerializer
 from django.shortcuts import get_object_or_404
 
 
