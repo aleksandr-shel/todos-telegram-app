@@ -1,15 +1,15 @@
 import {initAccount} from '../src/pages/account'
-import { initNotifications } from './common/notifications';
 import { initRealTime } from './common/realTime';
 import { initTelegramStuff } from './common/telegramStuff';
 import { initGroup } from './pages/group';
 import { initGroupCreate } from './pages/group-create';
 import { initGroups } from './pages/groups';
 import { initTodos } from './pages/todos';
+import {setupCloseModalBtn} from "./common/modal";
 
 document.addEventListener('DOMContentLoaded', async()=>{
-    
-    initNotifications()
+
+    setupCloseModalBtn('closeModalBtn')
     initAccount()
     initTelegramStuff()
     initRealTime()

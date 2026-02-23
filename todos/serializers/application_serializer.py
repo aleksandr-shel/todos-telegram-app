@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import GroupApplication, GroupInvite
+from ..models import GroupApplication
 from ..serializers.serializers import UserPublicSerializer
 
 class ApplicationSerializer(serializers.ModelSerializer):
@@ -8,11 +8,3 @@ class ApplicationSerializer(serializers.ModelSerializer):
         model = GroupApplication
         fields = '__all__'
         read_only_fields = ['id', 'created_at']
-        
-        
-class InviteSerializer(serializers.ModelSerializer):
-    
-    class Meta: 
-        model = GroupInvite
-        fields = '__all__'
-        read_only_fields = ['id', '']

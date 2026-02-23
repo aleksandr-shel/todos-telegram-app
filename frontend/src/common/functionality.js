@@ -115,6 +115,7 @@ function renderTask(task, listDiv, mainBox, inGroup=false, end = true){
         if (task.group !== null){
             const spanGroup = document.createElement('span')
             spanGroup.textContent = `Группа: `
+            spanGroup.classList.add('todo-item-group')
 
             const link = document.createElement('a')
             link.href=`/groups/${task.group.id}`

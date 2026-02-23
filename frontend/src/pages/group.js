@@ -10,7 +10,6 @@ export async function initGroup(){
     
     
     function renderGroup(group){
-        console.log(group)
         document.getElementById('groupName').textContent = `Группа: ${group.name}`
         document.getElementById('memberNumber').textContent = `${group.memberships.length}`
         
@@ -302,14 +301,50 @@ export async function initGroup(){
                 document.getElementById('membersBox').classList.remove('hidden')
             })
         }
-    }   
+    }
+    setupShowMembersButton('memberBtn')
 
+    async function deleteGroup(id){
+        try{
+            const response = await apiRequest('groups/' + id, 'delete')
+        }catch(err){
+            console.log(err)
+        }
+    }
+    function setupDeleteGroupBtn(id){
+        const groupDeleteBtn = document.getElementById(id)
+        if (groupDeleteBtn){
+            groupDeleteBtn.addEventListener('click',(e)=>{
+                deleteGroup(store.selectedGroup.id)
+                document.location.href='/groups'
+            })
+        }
+    }
+
+    async function updateGroup(id, group){
+        try{
+            const response = apiRequest('groups/'+id, 'PATCH', group)
+        }catch(err){
+            console.log(err)
+        }
+    }
+    function setupUpdateGroupBtn(id){
+        const groupUpdateBtn = document.getElementById(id)
+        if (groupUpdateBtn){
+            groupUpdateBtn.addEventListener('click',(e)=>{
+                console.log('clicked update button')
+                // updateGroup(store.selectedGroup.id, )
+            })
+        }
+    }
+
+    setupUpdateGroupBtn('groupUpdateBtn')
+    setupDeleteGroupBtn('groupDeleteBtn')
     setupShowHideBtns(['btn-show','btn-hide'])
     setupTextareaAutoResize('selectTaskDescription')
     setupTextareaAutoResize('addTaskDescription')
     setupAddTaskForm('add-task-form')
     setupSideMenuForm('selectedTaskForm')
     setupDeleteTaskBtn('deleteTaskBtn')
-    setupShowMembersButton('memberBtn')
     await loadOneGroup(getGroupIdFromPath())
 }

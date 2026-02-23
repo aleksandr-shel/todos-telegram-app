@@ -7,7 +7,7 @@ from .views.groups_view import GroupDetailsView, GroupListCreateView, GroupTasks
 from .views.memberships_view import GroupMembershipDetailsView, GroupMembershipListCreateView
 from .views.telegram_view import connect_telegram, test
 from .views.users_view import UsersView
-from .views.invite_application_view import InviteView, ApplicationView
+from .views.invite_application_view import InviteView, ApplicationView, ApplicationDetailsView
 
 urlpatterns = [
     path("api/todos/", TodoListCreateView.as_view()),
@@ -16,7 +16,9 @@ urlpatterns = [
     path("api/groups/<int:pk>", GroupDetailsView.as_view()),
     path("api/groups/<int:pk>/tasks", GroupTasksView.as_view()),
     path("api/invites/", InviteView.as_view()),
+    path("api/invites/<int:pk>", InviteView.as_view()),
     path("api/applications/", ApplicationView.as_view()),
+    path("api/applications/<int:pk>", ApplicationDetailsView.as_view()),
     path("api/groupmembers/<int:pk>", GroupMembershipDetailsView.as_view()),
     path("api/groupmembers/", GroupMembershipListCreateView.as_view()),
     path("api/account/login", LoginView.as_view()),

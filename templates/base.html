@@ -12,6 +12,13 @@
 </head>
 <body data-page="{% block page_id %}{% endblock page_id %}">
     <div class="app-shell">
+        <div id="modalWrapper" class="modal-wrapper">
+            <button id="closeModalBtn" class="close-btn modal-close-btn">
+            </button>
+            <div id="modalDiv" class="modal-box">
+                MODAL HERE
+            </div>
+        </div>
         <div id='notificationDiv' class='notifications-box'>
             {% comment %} <input id="msgInput">
             <button id="testRT">
